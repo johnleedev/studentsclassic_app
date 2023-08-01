@@ -2,12 +2,12 @@
   "expo": {
     "name": "studentsclassic",
     "slug": "studentsclassic",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/images/mainicon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/images/mainsplash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -15,16 +15,24 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.studentsclassic.app",
+      "buildNumber" : "2"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/images/mainicon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.studentsclassic.app"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4410b02a-a250-42dd-b307-66dbe2114cf9"
+      }
     }
   }
 }

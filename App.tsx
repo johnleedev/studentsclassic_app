@@ -1,20 +1,33 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from "react";
+import Loading from "./Loading";
+// import Navi_Opening from "./src/Navi_Opening";
+import Main from "./src/Main";
+import * as Font from "expo-font";
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+const getFonts = async () => {
+  await Font.loadAsync({
+    "Montserrat": require("./assets/Montserrat/Montserrat-VariableFont_wght.ttf"),
+    "Montserrat-Bold": require("./assets/Montserrat/static/Montserrat-Bold.ttf"),
+  });
+};
+
+export default class extends React.Component {
+  state = {
+    isLoading: true,
+  };
+  componentDidMount = async () => {
+    // 1,000가 1초
+    setTimeout(() => {
+      this.setState({ isLoading: false });
+    }, 3000);
+  };
+
+  render() {
+    getFonts();
+    if (this.state.isLoading) {
+      return <Loading />;
+    } else {
+      return <Main />;
+    }
+  }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
