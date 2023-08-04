@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { StyleSheet, KeyboardAvoidingView, Platform, Alert, Linking } from 'react-native';
 import { NavigationContainer, Route } from '@react-navigation/native';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -13,6 +13,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import { StatusBar } from "expo-status-bar";
 import {checkNotifications, requestNotifications} from 'react-native-permissions';
 import messaging from '@react-native-firebase/messaging';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // import Page1 from './Opening/Page1';
 // import Page2 from './Opening/Page2';
@@ -26,7 +27,13 @@ const Stack = createNativeStackNavigator();
 
 
 function Navi_Main (props : any) {
+
+  const [userName, setUserName] = useState<string>('');
+  const [userSchool, setUserSchool] = useState<string>('');
+  const [userPart, setUserPart] = useState<string>('');
+  const [userSchNum, setUserSchNum] = useState<string>('');
   
+  // 알림 설정 확인
   checkNotifications().then(({status, settings}) => {
     if (status === 'denied' || status === 'blocked'){
       requestNotifications(['alert', 'sound']);
@@ -40,13 +47,37 @@ function Navi_Main (props : any) {
   // firebase notification 토큰받기
   async function checkFireBaseApplicationPermission() {
     const token = await messaging().getToken();
-    console.log(Platform.OS, token);
+    console.log(Platform.OS, 'firebase token');
   }  
+
+  const getData = useCallback(
+    async () => {
+      try {
+        const Name : any = await AsyncStorage.getItem('name');
+        const School : any = await AsyncStorage.getItem('school');
+        const Part : any = await AsyncStorage.getItem('part');
+        const Number : any = await AsyncStorage.getItem('schNum');
+        
+        if(Name !== null) {
+          console.log('AsyncStorage get success');
+          setUserName(Name);
+          setUserSchool(School);
+          setUserPart(Part);
+          setUserSchNum(Number);
+        } else {
+          console.log('AsyncStorage 데이터 가져오기 실패');
+        }
+      } catch (error) {
+        console.log('AsyncStorage 데이터 가져오기 실패:', error);
+      }
+  }, [])
 
   useEffect(()=>{
     checkFireBaseApplicationPermission();
+    getData();
   }, [])
-  
+
+ 
   return (
     <Tab.Navigator labeled={false} style={styles.container}>
       <Tab.Screen name="Navi_Home" component={Navi_Home}

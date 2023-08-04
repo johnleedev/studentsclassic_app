@@ -1,11 +1,13 @@
 import React from 'react';
 import { View, Alert } from 'react-native';
 import { WebView } from 'react-native-webview';
+import axios from "axios";
+import MainURL from '../../MainURL';
 
-const NaverLoginScreen = () => {
+const NaverLoginScreen = (props : any) => {
 
   const YOUR_CLIENT_ID = 'NJivxK1ooCxnPodocRjp';
-  const YOUR_CALLBACK_URL = 'https://www.studentsclassic.com/';
+  const YOUR_CALLBACK_URL = 'https://www.studentsclassic.com/redirect.html';
   const INJECTED_JAVASCRIPT : string = `window.ReactNativeWebView.postMessage('')`
 
   // 네이버 로그인 콜백 URL을 감지하고 결과를 처리하는 함수
@@ -13,8 +15,22 @@ const NaverLoginScreen = () => {
     if (navState.url.startsWith(YOUR_CALLBACK_URL)) {
       // 접근 토큰 값 출력
       const access_token = getParamFromUrl(navState.url, 'access_token');
-      Alert.alert('Access Token', access_token);
-      // 네이버 사용자 프로필 조회
+      axios
+        .post(`${MainURL}/login/loginnaver`, {
+          AccessToken: access_token
+        })
+        .then((res: any)=>{
+          if (res) {
+            // console.log(res.data);
+            props.navigation.navigate("Logister", {data: res.data});
+            // const name = res.data.name;
+            // props.setIsLoggedIn(true);r
+            // // storeData(AccessToken, name)
+            // props.setShowModalNaver(false);
+          }
+        }).catch((err : string)=>{
+          console.log('토큰요청_err :', err)
+        });
       
     }
   };

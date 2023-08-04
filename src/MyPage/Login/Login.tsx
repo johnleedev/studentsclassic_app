@@ -10,9 +10,6 @@ import Logister from './Logister';
 
 function Login (props : any) {
 
-  const [showModalKakao, setShowModalKakao] = useState<boolean>(false);
-  const [showModalNaver, setShowModalNaver] = useState<boolean>(false);
-
   return (
     <View style={styles.container}>
       <View style={styles.mainlogo}>
@@ -20,28 +17,22 @@ function Login (props : any) {
       </View>
 
       {/* 카카오톡 로그인 */}
-      <TouchableOpacity style={styles.loginButtonkakao} onPress={()=>{setShowModalKakao(true)}}>
-        <Text style={styles.loginButtonTextkakao}>카카오톡 로그인</Text>
+      <TouchableOpacity 
+        style={styles.loginButtonkakao} 
+        onPress={()=>{
+          props.navigation.navigate("LoginKakao");
+        }}>
+      <Text style={styles.loginButtonTextkakao}>카카오톡 로그인</Text>
       </TouchableOpacity>
-
-      <Modal visible={showModalKakao} animationType="slide">
-        <LoginKakao 
-          closeModal={() => setShowModalKakao(false)} 
-          setIsLoggedIn={props.setIsLoggedIn}
-        />
-      </Modal>
 
       {/* 네이버 로그인 */}
-      <TouchableOpacity style={styles.loginButtonNaver} onPress={()=>{setShowModalNaver(true)}}>
+      <TouchableOpacity 
+        style={styles.loginButtonNaver} 
+        onPress={()=>{
+          props.navigation.navigate("LoginNaver");
+        }}>
         <Text style={styles.loginButtonTextNaver}>네이버 로그인</Text>
       </TouchableOpacity>
-
-      <Modal visible={showModalNaver} animationType="slide">
-        <LoginNaver
-          closeModal={() => setShowModalNaver(false)} 
-          setIsLoggedIn={props.setIsLoggedIn}
-        />
-      </Modal>
 
       <TouchableOpacity
         style={{ marginTop: 50 }}
@@ -49,7 +40,7 @@ function Login (props : any) {
         onPress={() => {
           props.navigation.navigate("Logister");
         }}>
-        <AppText style={{ textDecorationLine: 'underline' }}>회원가입</AppText>
+        <AppText style={{ textDecorationLine: 'underline' }}>email로 회원가입</AppText>
       </TouchableOpacity>
     
     </View>

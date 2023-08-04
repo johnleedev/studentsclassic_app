@@ -9,48 +9,41 @@ import axios from "axios";
 
 function MyPageMain (props: any) {
 
-  const [modalVisible, setModalVisible] = useState(false);
-    
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
-  const [AccessToken, setAccessToken] = useState<string>('');
-  const [name, setName] = useState<string>('');
-  const [school, setSchool] = useState<string>('');
-  const [part, setPart] = useState<string>('');
-  const [sch_num, setSch_num] = useState<string>('');
-  const [gender, setGender] = useState<string>('');
-  const [birthday, setBirthday] = useState<string>('');
-  
+  const [modalVisible, setModalVisible] = useState(false);
+ 
+  const [userName, setUserName] = useState<string>('');
+  const [userSchool, setUserSchool] = useState<string>('');
+  const [userPart, setUserPart] = useState<string>('');
+  const [userSchNum, setUserSchNum] = useState<string>('');
 
   useEffect(() => {
     getData();
-  }, [isLoggedIn]);
+  }, []);
 
   const getData = useCallback(
     async () => {
       try {
-        const accessToken : any = await AsyncStorage.getItem('token');
-        const userName : any = await AsyncStorage.getItem('name');
-        const gender : any = await AsyncStorage.getItem('gender');
-        const birthday : any = await AsyncStorage.getItem('birthday');
-        // const userSchool : any = await AsyncStorage.getItem('학교');
-        // const userPart : any = await AsyncStorage.getItem('파트');
-        // const userNumber : any = await AsyncStorage.getItem('학번');
+        const Name : any = await AsyncStorage.getItem('name');
+        const School : any = await AsyncStorage.getItem('school');
+        const Part : any = await AsyncStorage.getItem('part');
+        const Number : any = await AsyncStorage.getItem('schNum');
         
-        setAccessToken(accessToken);
-        setName(userName);
-        setGender(gender);
-        setBirthday(birthday);
+        if(Name) {
+          setUserName(Name);
+          setUserSchool(School);
+          setUserPart(Part);
+          setUserSchNum(Number);
+        } else {
+          return
+        }
 
-        // setSchool(userSchool);
-        // setPart(userPart);
-        // setSch_num(userNumber);
-        // setAccessToken(accessToken)
-        
       } catch (error) {
-        console.log('데이터 가져오기 실패:', error);
+        console.log('AsyncStorage 데이터 가져오기 실패:', error);
       }
   }, [])
+
+  
   
 
   let removeData = async () => {
@@ -88,7 +81,7 @@ function MyPageMain (props: any) {
     <View style={styles.container}>
       <View style={styles.profileContainer}>
         
-        <Text style={styles.name}>{name}님, 환영합니다.</Text>
+        <Text style={styles.name}>{userName}님, 환영합니다.</Text>
 
         <Modal
           animationType="slide"
@@ -99,8 +92,8 @@ function MyPageMain (props: any) {
           }}>
           <ProfileEdit 
           modalVisible={modalVisible} setModalVisible={setModalVisible}
-          name={name} school={school} part={part} sch_num={sch_num}
-          setName={setName} setSchool={setSchool} setPart={setPart} setSch_num={setSch_num}
+          // name={name} school={school} part={part} sch_num={sch_num}
+          // setName={setName} setSchool={setSchool} setPart={setPart} setSch_num={setSch_num}
           />
         </Modal>
 
@@ -115,9 +108,9 @@ function MyPageMain (props: any) {
         <Text style={styles.infoTitle}>회원 정보</Text>
         <View style={styles.infoBox}>
           <View style={styles.infoTextBox}>
-            <Text style={styles.infoText}>{name}</Text>
-            <Text style={styles.infoText}>{gender}</Text>
-            <Text style={styles.infoText}>{birthday}</Text>
+            <Text style={styles.infoText}>{userName}</Text>
+            {/* <Text style={styles.infoText}>{gender}</Text>
+            <Text style={styles.infoText}>{birthday}</Text> */}
           </View>
         </View>
       </View>

@@ -7,7 +7,7 @@ import MainURL from '../../MainURL';
 function LoginKakao (props : any) {
 
   const REST_API_KEY = 'ece291900807a6c37ef7506bac5c1c40';
-  const REDIRECT_URI = 'https://www.studentsclassic.com/';
+  const REDIRECT_URI = 'https://www.studentsclassic.com/redirect.html';
   const INJECTED_JAVASCRIPT : string = `window.ReactNativeWebView.postMessage('')`
   var authorize_code : any;
 

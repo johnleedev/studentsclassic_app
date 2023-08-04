@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert, ScrollView } from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
 import MainURL from '../../MainURL';
 import AppText from '../../../AppText';
@@ -7,22 +8,53 @@ import SelectDropdown from 'react-native-select-dropdown'
 
 function Logister (props : any) {
 
+  const navi_dataSet = () => {
+    if(props.route.params === null || props.route.params === undefined) {
+      return
+    } else {
+      const navigation_data = props.route.params.data
+      setUserAccount(navigation_data.email);
+      setUserName(navigation_data.name);
+    }
+  }
+
+  useEffect(()=>{
+    navi_dataSet();
+  }, [])
+
   const [userAccount, setUserAccount] = useState('');
   const [userName, setUserName] = useState('');
+  const [userSchool, setUserSchool] = useState('');
+  const [userSchNum, setUserSchNum] = useState('');
+  const [userPart, setUserPart] = useState('');
+
+  const [userAccountMessage, setUserAccountMessage] = useState('');
+  const [isUserAccount, setIsUserAccount] = useState(false);
   const [userNameMessage, setUserNameMessage] = useState('');
   const [isUserName, setIsUserName] = useState(false);
-
-  const [isUserIDAvailable, setIsUserIDAvailable] = useState(true);
 
   const schools = ["가천대학교", "경북대학교", "경희대학교", "계명대학교", "국민대학교", 
     "군산대학교", "단국대학교", "대구가톨릭대", "목원대학교", "서울대학교", "서울사이버대", 
     " 성신여대", "수원대학교", "숙명여대", "연세대학교", "영남대학교", "이화여대", "전주대학교", 
     "제주대학교", "중앙대학교", "추계예술대", "한세대학교", "한양대학교", "한예종"]
 
-  const sch_num = ["25", "24", "23", "22", "21", "20", "19", "18", "17", "16", "15", "14", "13", 
-          "12", "11", "10", "09", "08", "07", "06", "05", "04", "03", "02", "01", "00", "99이상"]
+  const sch_num = ["25학번", "24학번", "23학번", "22학번", "21학번", "20학번", "19학번", "18학번", "17학번", "16학번", "15학번", "14학번", "13학번", 
+          "12학번", "11학번", "10학번", "09학번", "08학번", "07학번", "06학번", "05학번", "04학번", "03학번", "02학번", "01학번", "00학번", "99학번 이상"]
 
   const part = ["Soprano", "Mezze", "Tenor", "Baritone", "Bass"]
+
+
+  const onChangeUserAccount = (text : any) => {
+    const userNameRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
+    setUserAccount(text);
+    if (!userNameRegex.test(text)) {
+      setUserAccountMessage('email 형식이 올바르지 않습니다.');
+      setIsUserAccount(false);
+    } else {
+      setUserAccountMessage('올바른 형식의 메일입니다.');
+      setIsUserAccount(true);
+    }
+  };
 
   const onChangeUserName = (text : any) => {
     const userNameRegex = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
@@ -39,16 +71,22 @@ function Logister (props : any) {
     }
   };
 
+  // 회원가입하기
   const handleSignup = () => {
-    if (userName !== null) {
+    if (userName !== null && userAccount !== null) {
       axios
         .post(`${MainURL}/login/logisterdo`, {
-          userName: userName
+          userAccount: userAccount,
+          userName: userName,
+          userSchool: userSchool,
+          userSchNum: userSchNum,
+          userPart: userPart
         })
         .then((res) => {
           if (res.data === userName) {
             Alert.alert('회원가입이 완료되었습니다!');
-            props.closeModallogister();
+            asycData();
+            props.navigation.navigate("MyPageMain");
           } else {
             Alert.alert('다시 시도해 주세요.');
           }
@@ -61,18 +99,18 @@ function Logister (props : any) {
     }
   };
 
-  const handleCheckAvailability = useCallback(() => {
-    axios
-      .post(`${MainURL}/login/searchid`, { userName })
-      .then((res) => {
-        setIsUserIDAvailable(res.data);
-      })
-      .catch((error) => {
-        setIsUserIDAvailable(true);
-      });
-  }, [userName]);
-
-  
+  // AsyncStorage 데이터 저장하기
+  const asycData = async () => {
+    try {
+      await AsyncStorage.setItem('name', userName);
+      await AsyncStorage.setItem('school', userSchool);
+      await AsyncStorage.setItem('schNum', userSchNum);
+      await AsyncStorage.setItem('part', userPart);
+    } catch (error) {
+      console.log('AsycSet_err', error);
+    }
+  };
+ 
 
   return (
     <View style={styles.container}>
@@ -83,17 +121,17 @@ function Logister (props : any) {
 
       <ScrollView showsVerticalScrollIndicator={false} style={styles.inputContainer}>
 
-        <AppText>게정(이메일)*</AppText>
+        <AppText>계정(이메일)*</AppText>
         <TextInput
           style={styles.input}
           placeholder="e-mail"
           placeholderTextColor='gray'
-          // onChangeText={onChangeUserName}
+          onChangeText={onChangeUserAccount}
           value={userAccount}
         />
-        {userName.length > 0 && (
-          <Text style={[styles.message, isUserName ? styles.success : styles.error]}>
-            {userNameMessage}
+        {userAccount.length > 0 && (
+          <Text style={[styles.message, isUserAccount ? styles.success : styles.error]}>
+            {userAccountMessage}
           </Text>
         )}
        
@@ -117,7 +155,7 @@ function Logister (props : any) {
           buttonStyle={styles.input}
           defaultButtonText= '선택'
           onSelect={(selectedItem, index) => {
-            
+            setUserSchool(selectedItem);
           }}
         />
                 
@@ -127,7 +165,7 @@ function Logister (props : any) {
           buttonStyle={styles.input}
           defaultButtonText= '선택'
           onSelect={(selectedItem, index) => {
-            
+            setUserSchNum(selectedItem);
           }}
         />
 
@@ -137,17 +175,22 @@ function Logister (props : any) {
           buttonStyle={styles.input}
           defaultButtonText= '선택'
           onSelect={(selectedItem, index) => {
-            
+            setUserPart(selectedItem);
           }}
         />
 
         <TouchableOpacity style={styles.button} onPress={handleSignup}>
-          <Text style={styles.buttonText}>회원가입</Text>
+          <Text style={styles.buttonText}>가입하기</Text>
         </TouchableOpacity>
 
         <View style={styles.linksContainer}>
           <TouchableOpacity onPress={() => {
-            props.closeModallogister();
+            setUserAccount('');
+            setUserName('');
+            setUserSchool('');
+            setUserSchNum('');
+            setUserPart('');
+            props.navigation.navigate("Login");
           }}>
             <Text style={styles.linkButton}>나가기</Text>
           </TouchableOpacity>
