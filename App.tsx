@@ -1,8 +1,16 @@
 import * as React from "react";
-import Loading from "./Loading";
-// import Navi_Opening from "./src/Navi_Opening";
-import Main from "./src/Main";
+import { useState, useEffect, useCallback } from 'react';
+import { KeyboardAvoidingView, Platform } from 'react-native';
 import * as Font from "expo-font";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { NavigationContainer, Route } from '@react-navigation/native';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { StatusBar } from "expo-status-bar";
+import SplashLoading from "./SplashLoading";
+import Main from "./src/Main";
+import Navi_Login from './src/Login/Navi_Login'
+
+const Stack = createNativeStackNavigator();
 
 const getFonts = async () => {
   await Font.loadAsync({
@@ -11,23 +19,24 @@ const getFonts = async () => {
   });
 };
 
-export default class extends React.Component {
-  state = {
-    isLoading: true,
-  };
-  componentDidMount = async () => {
-    // 1,000가 1초
-    setTimeout(() => {
-      this.setState({ isLoading: false });
-    }, 3000);
-  };
+export default function App () {
 
-  render() {
+  useEffect(() => {
     getFonts();
-    if (this.state.isLoading) {
-      return <Loading />;
-    } else {
-      return <Main />;
-    }
-  }
-}
+  }, []);
+
+  return (
+    <NavigationContainer>
+      <StatusBar style="auto" />
+      <KeyboardAvoidingView behavior={Platform.select({ ios: "padding", android: undefined })}style={{ flex: 1 }}>  
+        <Stack.Navigator>
+          <Stack.Screen name="SplashLoading" component={SplashLoading} options={{ headerShown: false }} />
+          <Stack.Screen name="Navi_Main" component={Main} options={{ headerShown: false }} />
+          <Stack.Screen name="Navi_Login" component={Navi_Login} options={{ headerShown: false }}/>
+        </Stack.Navigator>
+      </KeyboardAvoidingView>
+    </NavigationContainer>
+  );
+
+};
+

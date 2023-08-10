@@ -2,48 +2,37 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import AppText from '../../../AppText';
+import AppText from '../../AppText';
 import MainURL from '../../MainURL';
 
 function ProfileEdit (props : any) {
 
   const [modalVisible, setModalVisible] = useState(props.modalVisible);
   
-  const [name, setName] = useState<string>(props.name);
-  const [school, setSchool] = useState<string>(props.school);
-  const [part, setPart] = useState<string>(props.part);
-  const [sch_num, setSch_num] = useState<string>(props.sch_num);
-
-  const [originName, setoriginName] = useState<string>(props.name);
-  const [originSchool, setoriginSchool] = useState<string>(props.school);
-  const [originSch_num, setoriginSch_num] = useState<string>(props.sch_num);
-
-  const changeProfile = async (data1 : string, data2 : string, data3 : string, data4 : string) => {
-    try {
-      await AsyncStorage.mergeItem('이름', data1);
-      await AsyncStorage.mergeItem('학교', data2);
-      await AsyncStorage.mergeItem('파트', data3);
-      await AsyncStorage.mergeItem('학번', data4);
-    } catch (error) {
-      console.log(error)
-    }
-  };
+  const [name, setName] = useState<string>(props.userName);
+  const [school, setSchool] = useState<string>(props.userSchool);
+  const [schNum, setSchNum] = useState<string>(props.userSchNum);
+  const [part, setPart] = useState<string>(props.userPart);
+  
+  const [originName, setoriginName] = useState<string>(props.userName);
+  const [originSchool, setoriginSchool] = useState<string>(props.userSchool);
+  const [originSchNum, setoriginSchNum] = useState<string>(props.userSchNum);
 
   const handleProfileUpdate = async () => {
     try {
       await axios
           .post(`${MainURL}/login/editprofile`, {
-            originName : originName, originSchool : originSchool, originSch_num : originSch_num,
-            name: name, school: school, part: part, sch_num: sch_num,
+            originName : originName, originSchool : originSchool, originSchNum : originSchNum,
+            name: name, school: school, part: part, schNum: schNum,
           })
           .then((res) => {
             if (res.data) {
-              changeProfile(res.data.userName, res.data.school, res.data.part, res.data.sch_num)
+              changeProfile(res.data.userName, res.data.school, res.data.part, res.data.schNum)
 
               props.setName(res.data.userName)
               props.setSchool(res.data.school)
               props.setPart(res.data.part)
-              props.setSch_num(res.data.sch_num)
+              props.setSchNum(res.data.schNum)
               
             } else {
               console.log('EditProfile failed!');
@@ -55,6 +44,17 @@ function ProfileEdit (props : any) {
       console.log('EeditProfile failed!', error);
     }
     props.setModalVisible(!modalVisible)
+  };
+
+  const changeProfile = async (data1 : string, data2 : string, data3 : string, data4 : string) => {
+    try {
+      await AsyncStorage.mergeItem('이름', data1);
+      await AsyncStorage.mergeItem('학교', data2);
+      await AsyncStorage.mergeItem('파트', data3);
+      await AsyncStorage.mergeItem('학번', data4);
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   return (
@@ -73,7 +73,7 @@ function ProfileEdit (props : any) {
         <TextInput style={styles.input} value={part} onChangeText={setPart} />
 
         <AppText style={styles.label}>학번</AppText>
-        <TextInput style={styles.input} value={sch_num} onChangeText={setSch_num} />
+        <TextInput style={styles.input} value={schNum} onChangeText={setSchNum} />
 
         <TouchableOpacity style={styles.button} onPress={handleProfileUpdate}>
           <AppText style={styles.buttonText}>수정하기</AppText>
@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 15,
     paddingHorizontal: 10,
+    textAlign: 'center'
   },
   button: {
     backgroundColor: 'blacke',

@@ -10,7 +10,7 @@ function Board() {
   return (
     <Stack.Navigator >
       <Stack.Screen options={{headerShown: false}} name={"Main"} component={Main} />
-      <Stack.Screen options={{headerShown: false}} name={"Detail"} component={Detail} />
+      <Stack.Screen name={"Detail"} options={{title: '커뮤니티'}} component={Detail} />
       <Stack.Screen options={{headerShown: false}} name={"Post"} component={Post} />
     </Stack.Navigator>
   );

@@ -39,11 +39,17 @@
     <dict>
       <key>NSAllowsArbitraryLoads</key>
       <true/>
+      <key>NSAllowsArbitraryLoadsInWebContent</key>
+		  <true/>
       <key>NSExceptionDomains</key>
       <dict>
-        <key>localhost</key>
+        <key>https://nid.naver.com/oauth2.0/authorize</key>
         <dict>
           <key>NSExceptionAllowsInsecureHTTPLoads</key>
+          <true/>
+          <key>NSExceptionRequiresForwardSecrecy</key>
+          <true/>
+          <key>NSIncludesSubdomains</key>
           <true/>
         </dict>
       </dict>

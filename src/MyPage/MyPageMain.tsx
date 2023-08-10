@@ -1,116 +1,50 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, Modal, StyleSheet, TouchableOpacity, Pressable, Alert, Image } from 'react-native';
+import { View, Text, Modal, StyleSheet, TouchableOpacity, Pressable, Alert, Image, ScrollView } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Login from './Login/Login';
-import { MaterialCommunityIcons, MaterialIcons, AntDesign } from '@expo/vector-icons';
-import MainURL from '../MainURL';
-import ProfileEdit from './Login/ProfileEdit'
-import axios from "axios";
+import { MaterialCommunityIcons, MaterialIcons, AntDesign, Entypo } from '@expo/vector-icons';
+import AsyncGetItem from '../AsyncGetItem'
 
 function MyPageMain (props: any) {
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
- 
-  const [userName, setUserName] = useState<string>('');
-  const [userSchool, setUserSchool] = useState<string>('');
-  const [userPart, setUserPart] = useState<string>('');
-  const [userSchNum, setUserSchNum] = useState<string>('');
-
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const getData = useCallback(
-    async () => {
-      try {
-        const Name : any = await AsyncStorage.getItem('name');
-        const School : any = await AsyncStorage.getItem('school');
-        const Part : any = await AsyncStorage.getItem('part');
-        const Number : any = await AsyncStorage.getItem('schNum');
-        
-        if(Name) {
-          setUserName(Name);
-          setUserSchool(School);
-          setUserPart(Part);
-          setUserSchNum(Number);
-        } else {
-          return
-        }
-
-      } catch (error) {
-        console.log('AsyncStorage 데이터 가져오기 실패:', error);
-      }
-  }, [])
-
-  
-  
-
-  let removeData = async () => {
+  // AsyncGetData
+  const [asyncGetData, setAsyncGetData] = useState<any>({});
+  const asyncFetchData = async () => {
     try {
-      await AsyncStorage.removeItem('token');
-      await AsyncStorage.removeItem('name');
-      await AsyncStorage.removeItem('gender');
-      await AsyncStorage.removeItem('birthday');
+      const data = await AsyncGetItem();
+      setAsyncGetData(data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
-
+  
+  useEffect(() => {
+    asyncFetchData();
+  }, []);
+ 
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    // Alert.alert('로그아웃 되었습니다.');
-    // if (AccessToken) {
-    //   axios ({
-    //     method: 'POST',
-    //     url: 'https://kapi.kakao.com/v1/user/logout',
-    //     headers: {
-    //       Authorization : `Bearer ${AccessToken}`
-    //     },
-    //   }).then((response) => {
-    //     console.log('카카오 로그아웃되었습니다.');
-    //   }).catch(function (error) {
-    //     console.log('error', error);
-    //   })
-    // }
-    removeData();
+    AsyncStorage.removeItem('token');
+    AsyncStorage.removeItem('name');
+    AsyncStorage.removeItem('school');
+    AsyncStorage.removeItem('schNum');
+    AsyncStorage.removeItem('part');
+    Alert.alert('로그아웃 되었습니다.');
+    props.navigation.replace("Navi_Login")
   };
 
-  return isLoggedIn ?
-  (
-    <View style={styles.container}>
+  return (
+    <ScrollView style={styles.container}>
       <View style={styles.profileContainer}>
-        
-        <Text style={styles.name}>{userName}님, 환영합니다.</Text>
-
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}>
-          <ProfileEdit 
-          modalVisible={modalVisible} setModalVisible={setModalVisible}
-          // name={name} school={school} part={part} sch_num={sch_num}
-          // setName={setName} setSchool={setSchool} setPart={setPart} setSch_num={setSch_num}
-          />
-        </Modal>
-
-        <TouchableOpacity style={styles.editProfileButton} onPress={()=>{
-            setModalVisible(true)
-          }}>
-        <Text style={styles.editProfileButtonText}>프로필 수정</Text>
-        </TouchableOpacity>
+         <Text style={styles.name}>{asyncGetData.userName}님, 환영합니다.</Text>  
       </View> 
 
       <View style={styles.infoContainer}>
         <Text style={styles.infoTitle}>회원 정보</Text>
         <View style={styles.infoBox}>
           <View style={styles.infoTextBox}>
-            <Text style={styles.infoText}>{userName}</Text>
-            {/* <Text style={styles.infoText}>{gender}</Text>
-            <Text style={styles.infoText}>{birthday}</Text> */}
+            <Text style={styles.infoText}>이름: {asyncGetData.userName}</Text>
+            <Text style={styles.infoText}>학교: {asyncGetData.userSchool}</Text>
+            <Text style={styles.infoText}>학번: {asyncGetData.userSchNum}</Text>
+            <Text style={styles.infoText}>파트: {asyncGetData.userPart}</Text>
           </View>
         </View>
       </View>
@@ -145,19 +79,27 @@ function MyPageMain (props: any) {
           <Text style={styles.bottomButtonText}>약관 및 정책</Text>
           <AntDesign name="right" size={15} color="black" />
         </TouchableOpacity>
+        <TouchableOpacity style={styles.bottomButton} onPress={()=>{
+          props.navigation.navigate("개인정보처리방침");
+        }}>
+          <Entypo name="info" size={20} color="black" />
+          <Text style={styles.bottomButtonText}>개인정보처리방침</Text>
+          <AntDesign name="right" size={15} color="black" />
+        </TouchableOpacity>
       </View>
 
+      <View style={styles.logoutContainer}>
+        <TouchableOpacity
+          hitSlop={{ top: 15, bottom: 15 }}
+          onPress={handleLogout}
+          style={styles.logoutButton}
+        >
+          <Text style={styles.logoutButtonText}>로그아웃</Text>
+        </TouchableOpacity> 
+      </View>
 
-      <TouchableOpacity
-        hitSlop={{ top: 15, bottom: 15 }}
-        onPress={handleLogout}
-        style={styles.logoutButton}
-      >
-        <Text style={styles.logoutButtonText}>로그아웃</Text>
-      </TouchableOpacity> 
-
-    </View>
-  ) : <Login navigation={props.navigation} setIsLoggedIn={setIsLoggedIn}/>
+    </ScrollView>
+  )
 };
 
 const styles = StyleSheet.create({
@@ -192,9 +134,8 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   infoContainer: {
-    flex: 1,
+    flex: 2,
     padding: 20,
-    marginBottom: 20
   },
   infoTitle: {
     fontSize: 24,
@@ -221,9 +162,10 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: 18,
-    marginBottom: 5,
+    marginTop: 15,
   },
   bottomContainer: {
+    flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-between',
     padding: 20,
@@ -245,6 +187,9 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 16,
     color: '#555',
+  },
+  logoutContainer : {
+    flex: 1,
   },
   logoutButton: {
     padding: 10,

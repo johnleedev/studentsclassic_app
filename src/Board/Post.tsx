@@ -1,41 +1,33 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, TextInput, StyleSheet, Alert, TouchableOpacity, Text, ScrollView } from 'react-native';
 import axios from 'axios'
-import MainURL from '../MainURL';
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRoute } from '@react-navigation/native';
+import MainURL from '../../MainURL';
+import AsyncGetItem from '../AsyncGetItem'
+import { Feather, Ionicons, FontAwesome } from '@expo/vector-icons';
 
 function Post(props: any) {
 
-  const route : any = useRoute();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [name, setName] = useState<string>('');
-  const [school, setSchool] = useState<string>('');
 
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const closeDetail = () => {
-    props.navigation.goBack();
+  // AsyncGetData
+  const [asyncGetData, setAsyncGetData] = useState<any>({});
+  const asyncFetchData = async () => {
+    try {
+      const data = await AsyncGetItem();
+      setAsyncGetData(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
-  
-  const getData = useCallback(
-    async () => {
-      try {
-        const name : any = await AsyncStorage.getItem('이름');
-        const school : any = await AsyncStorage.getItem('학교');
-        setName(name);
-        setSchool(school);
-      } catch (error) {
-        console.log('데이터 가져오기 실패:', error);
-      }  
-  }, [])
+   
+  useEffect(() => {
+    asyncFetchData();
+  }, []);
 
   const createPost = async () => {
     axios.post(`${MainURL}/board/posts`, {
-      title: title, content: content, name : name, school : school
+      title: title, content: content, userName: asyncGetData.userName, userSchool: asyncGetData.userSchool
     })
       .then((res) => {
         if (res.data) {
@@ -50,9 +42,24 @@ function Post(props: any) {
       })
   };
 
+  const closeDetail = () => {
+    props.navigation.goBack();
+  };
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>게시글 쓰기</Text>
+      <View style={styles.addTitleBox}>
+        <View style={styles.addTitleTextbox}>
+          <Text style={styles.addTitleText2}>
+            <FontAwesome name="pencil-square-o" size={20} color="black" />
+          </Text>
+          <Text style={styles.addTitleText2}>{asyncGetData.userSchool}</Text>
+          <Text style={styles.addTitleText2}>{asyncGetData.userSchNum}</Text>
+          <Text style={styles.addTitleText2}>{asyncGetData.userPart}</Text>
+          <Text style={styles.addTitleText2}>{asyncGetData.userName}</Text>
+        </View>
+        </View>
       <TextInput
         style={[styles.input, styles.titleInput]}
         placeholder="제목"
@@ -91,6 +98,23 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
     textAlign: 'center',
+  },
+  addTitleBox: {
+    marginBottom: 8,
+  },
+  addTitleText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333333',
+    marginBottom: 4,
+  },
+  addTitleText2: {
+    fontSize: 16,
+    marginHorizontal: 3,
+  },
+  addTitleTextbox: {
+    flexDirection: 'row',
+    marginVertical: 5,
   },
   input: {
     borderWidth: 1,

@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from 'react'
 import Swiper from 'react-native-swiper'
 import { StyleSheet, TouchableOpacity, View, Image, Linking } from 'react-native';
-import MainURL from '../MainURL';
+import MainURL from '../../MainURL';
 
 function NoticeSlide() {
 

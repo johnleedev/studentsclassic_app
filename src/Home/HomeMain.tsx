@@ -3,9 +3,7 @@ import { StyleSheet, View, Image, TextInput, TouchableOpacity, ScrollView, Alert
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import AppText from '../../AppText';
 import Schoollist from './Schoollist';
-import MainURL from '../MainURL';
-import {checkNotifications} from 'react-native-permissions';
-import messaging from '@react-native-firebase/messaging';
+import MainURL from '../../MainURL';
 
 function HomeMain(props : any) {
 

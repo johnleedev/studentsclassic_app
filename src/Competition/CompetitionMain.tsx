@@ -2,7 +2,7 @@ import React, { useState, useEffect} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useScrollToTop } from '@react-navigation/native';
 import axios from 'axios';
-import MainURL from '../MainURL';
+import MainURL from '../../MainURL';
 import NoticeSlide from './NoticeSlide';
 
 function CompetitionMain (props : any) {

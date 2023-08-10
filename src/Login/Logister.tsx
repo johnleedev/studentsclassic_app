@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert, ScrollView } from 'react-native';
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from 'axios';
 import MainURL from '../../MainURL';
-import AppText from '../../../AppText';
+import AppText from '../../AppText';
 import SelectDropdown from 'react-native-select-dropdown'
+import AsyncSetItem from '../AsyncSetItem'
 
 function Logister (props : any) {
 
@@ -12,9 +12,10 @@ function Logister (props : any) {
     if(props.route.params === null || props.route.params === undefined) {
       return
     } else {
-      const navigation_data = props.route.params.data
-      setUserAccount(navigation_data.email);
-      setUserName(navigation_data.name);
+      const navi_data = props.route.params.data;
+      setRefreshToken(navi_data.refreshToken);
+      setUserAccount(navi_data.email);
+      setUserName(navi_data.name);
     }
   }
 
@@ -22,6 +23,7 @@ function Logister (props : any) {
     navi_dataSet();
   }, [])
 
+  const [refreshToken, setRefreshToken] = useState('');
   const [userAccount, setUserAccount] = useState('');
   const [userName, setUserName] = useState('');
   const [userSchool, setUserSchool] = useState('');
@@ -73,7 +75,7 @@ function Logister (props : any) {
 
   // 회원가입하기
   const handleSignup = () => {
-    if (userName !== null && userAccount !== null) {
+    if (userName !== null && userAccount !== null && userSchool !== null && userSchNum !== null && userPart !== null ) {
       axios
         .post(`${MainURL}/login/logisterdo`, {
           userAccount: userAccount,
@@ -85,8 +87,8 @@ function Logister (props : any) {
         .then((res) => {
           if (res.data === userName) {
             Alert.alert('회원가입이 완료되었습니다!');
-            asycData();
-            props.navigation.navigate("MyPageMain");
+            AsyncSetItem(refreshToken, userName, userSchool, userSchNum, userPart);
+            props.navigation.replace('Navi_Main');
           } else {
             Alert.alert('다시 시도해 주세요.');
           }
@@ -98,19 +100,6 @@ function Logister (props : any) {
       Alert.alert('빈칸을 입력해주세요');
     }
   };
-
-  // AsyncStorage 데이터 저장하기
-  const asycData = async () => {
-    try {
-      await AsyncStorage.setItem('name', userName);
-      await AsyncStorage.setItem('school', userSchool);
-      await AsyncStorage.setItem('schNum', userSchNum);
-      await AsyncStorage.setItem('part', userPart);
-    } catch (error) {
-      console.log('AsycSet_err', error);
-    }
-  };
- 
 
   return (
     <View style={styles.container}>
@@ -197,9 +186,7 @@ function Logister (props : any) {
         </View>
 
       </ScrollView>
-      
-      
-      
+            
     </View>
   );
 };

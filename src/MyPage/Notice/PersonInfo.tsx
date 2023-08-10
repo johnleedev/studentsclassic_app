@@ -2,9 +2,9 @@ import React from 'react';
 import {View, Text, Button} from 'react-native';
 import { WebView } from 'react-native-webview';
 
-function Policy (props : any) {
+function PersonInfo (props : any) {
 
-  const Url = `https://studentsclassic.com/termsinfo.html`;
+  const Url = `https://studentsclassic.com/personalinfo.html`;
 
   return (
     <View style={{ flex: 1 }}>
@@ -16,4 +16,4 @@ function Policy (props : any) {
   );
 }
 
-export default Policy ;
+export default PersonInfo ;

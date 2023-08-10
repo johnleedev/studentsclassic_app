@@ -3,7 +3,7 @@ import Swiper from 'react-native-swiper'
 // import Swiper from 'react-native-swiper-flatlist';
 import { StyleSheet, TouchableOpacity, View, Image, Linking } from 'react-native';
 import AppText from '../../AppText';
-import MainURL from '../MainURL';
+import MainURL from '../../MainURL';
 import axios from 'axios';
 
 function Schoollist() {
@@ -43,7 +43,7 @@ function Schoollist() {
                 />
               </View>
               <View style={styles.textbox}>
-                <AppText style={{ fontSize: 20 }}>{schoollist[i].name}</AppText>
+                <AppText style={{ fontSize: 18 }}>{schoollist[i].name}</AppText>
                 <AppText>{schoollist[i].subname}</AppText>
                 <AppText style={styles.schooltitle}>홈페이지</AppText>
               </View>

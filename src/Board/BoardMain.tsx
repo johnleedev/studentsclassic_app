@@ -1,10 +1,12 @@
 import React, { useState, useEffect} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { useScrollToTop } from '@react-navigation/native';
 import axios from 'axios';
-import MainURL from '../MainURL';
+import MainURL from '../../MainURL';
+import { Feather, Ionicons, FontAwesome } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function BoardMain(props: any) {
+
   const [posts, setPosts] = useState<any>([]);
   const [refresh, setRefresh] = useState<any>(false);
   
@@ -21,23 +23,23 @@ function BoardMain(props: any) {
   };
 
   const openPostDetails = async (post: any) => {
-    axios.post(`${MainURL}/board/posts/${post.id}`);
-    try {
-      await props.navigation.navigate('Detail', { data:post });
-    } catch (error) {
-      console.error(error);
-    }
+    axios.post(`${MainURL}/board/posts/${post.id}`).then(()=>{
+        setRefresh(!refresh);
+        props.navigation.navigate('Detail', { data: post });
+      }).catch((error)=>{
+        console.error(error);
+      })
   };
 
   const goToPostScreen = () => {
-    props.navigation.navigate('Post');
+    props.navigation.navigate('Post')
   };
 
-
-
   return (
+    <View style={styles.container}>
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>자유게시판</Text>
+      <View>
+      <Text style={styles.title}>커뮤니티</Text>
       {posts ? (
         posts.map((post: any) => (
           <TouchableOpacity
@@ -52,19 +54,25 @@ function BoardMain(props: any) {
                 <Text style={styles.authorText}>{post.name}</Text>
               </View>
             </View>
-            <Text style={styles.postContent} numberOfLines={2}>{post.content}</Text>
             <View style={styles.postFooter}>
-              <Text style={styles.commentCount}>댓글: {post.commentCount ? post.commentCount : '0' }</Text>
-              <Text style={styles.viewCount}>조회: {post.views}</Text>
+              <Text style={styles.commentCount}>
+                <Ionicons name="chatbubble-ellipses-outline" size={15} color="black" /> {post.commentCount ? post.commentCount : '0' }
+              </Text>
+              <Text style={styles.viewCount}>
+                <Ionicons name="md-eye-outline" size={15} color="black" /> {post.views}
+              </Text>
             </View>
           </TouchableOpacity>
         ))
       ) : ( <Text></Text> )}
+      </View>
+      </ScrollView>
       <TouchableOpacity style={styles.newPostButton} onPress={goToPostScreen}>
-        <Text style={styles.newPostButtonText}>새 게시물 작성</Text>
+        <Text style={styles.newPostButtonText}>
+          <FontAwesome name="pencil-square-o" size={24} color="white" />
+        </Text>
       </TouchableOpacity>
-      
-    </ScrollView>
+    </View>
   );
 }
 
@@ -127,11 +135,13 @@ const styles = StyleSheet.create({
     color: '#555555',
   },
   newPostButton: {
+    position: 'absolute',
+    bottom: 16,
+    right: 16,
     backgroundColor: 'black',
     padding: 12,
-    borderRadius: 8,
+    borderRadius: 10,
     alignItems: 'center',
-    marginBottom: 16,
   },
   newPostButtonText: {
     fontSize: 16,

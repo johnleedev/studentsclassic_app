@@ -1,25 +1,28 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Button, StyleSheet, Alert, ScrollView, Modal  } from 'react-native';
 import { useRoute } from '@react-navigation/native';
-
 import AddCommentModal from './AddCommentModal'
 import axios from 'axios';
-import MainURL from '../MainURL';
+import MainURL from '../../MainURL';
+import { Feather, Ionicons, FontAwesome, EvilIcons } from '@expo/vector-icons';
 
 function Detail (props: any) {
   
   const route : any = useRoute();
   const [addCommentVisible, setAddCommentVisible] = useState<any>(false);
-  const [comments, setComments] = useState<any[]>([]);
+  const [commentsData, setCommentsData] = useState<any[]>([]);
   
   useEffect(() => {
     fetchComments(route.params.data.id)
   }, [addCommentVisible]);
 
   const fetchComments = async (postId: number) => {
-    axios.get(`${MainURL}/board/comments/${postId}`).then((res) => {
-      setComments(res.data);
-    });
+    axios
+      .get(`${MainURL}/board/comments/${postId}`)
+      .then((res) => {
+        console.log(res.data);
+        setCommentsData(res.data);
+      });
   };
 
   const closeDetail = () => {
@@ -35,8 +38,12 @@ function Detail (props: any) {
           <Text style={styles.postAuthor}>{route.params.data?.name}</Text>
         </View>
         <View style={styles.titleContainer2}>
-          <Text style={styles.postViews}>조회 : {route.params.data?.views}</Text>
-          <Text style={styles.postCommentCount}>댓글 : {route.params.data?.commentCount}</Text>
+          <Text style={styles.postViews}>
+            <Ionicons name="md-eye-outline" size={15} color="black" /> {route.params.data?.views}
+          </Text>
+          <Text style={styles.postCommentCount}>
+            <Ionicons name="chatbubble-ellipses-outline" size={15} color="black" /> {route.params.data?.commentCount}
+          </Text>
         </View>
         <Text style={styles.postContent}>{route.params.data?.content}</Text>
         
@@ -45,13 +52,14 @@ function Detail (props: any) {
       {/* Display comments */}
       <View style={styles.commentContainer}>
         <Text style={styles.commentTitle}>댓글</Text>
-        {comments ? (
-            comments.map((comment: any, index: number) => (
+        {commentsData ? (
+            commentsData.map((comment: any, index: number) => (
             <View style={styles.commentItem} key={comment.id}>
               <View style={styles.commentHeader}>
-                <Text style={styles.commentAuthor}>{comment.school}</Text>
-                <Text style={styles.commentAuthor}>{comment.name}</Text>
-                <Text style={styles.commentTime}>{comment.created_at}</Text>
+                <Text style={styles.commentAuthor}>{comment.userSchool}</Text>
+                <Text style={styles.commentAuthor}>{comment.userSchNum}</Text>
+                <Text style={styles.commentAuthor}>{comment.userPart}</Text>
+                <Text style={styles.commentAuthor}>{comment.userName}</Text>
                 <View style={styles.commentSeparator} />
               </View>
               <View style={styles.commentTextBox}>

@@ -1,13 +1,18 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Button, StyleSheet, Alert, ScrollView } from 'react-native';
 import axios from 'axios';
-import MainURL from '../MainURL';
+import MainURL from '../../MainURL';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Feather, Ionicons, FontAwesome } from '@expo/vector-icons';
 
 function AddCommentModal(props : any) {
+
   const [commentText, setCommentText] = useState('');
-  const [name, setName] = useState<string>('');
-  const [school, setSchool] = useState<string>('');
+  
+  const [userName, setUserName] = useState<string>('');
+  const [userSchool, setUserSchool] = useState<string>('');
+  const [userPart, setUserPart] = useState<string>('');
+  const [userSchNum, setUserSchNum] = useState<string>('');
 
   useEffect(() => {
     getData();
@@ -16,10 +21,18 @@ function AddCommentModal(props : any) {
   const getData = useCallback(
     async () => {
       try {
-        const name : any = await AsyncStorage.getItem('이름');
-        const school : any = await AsyncStorage.getItem('학교');
-        setName(name);
-        setSchool(school);
+        const Name : any = await AsyncStorage.getItem('name');
+        const School : any = await AsyncStorage.getItem('school');
+        const Part : any = await AsyncStorage.getItem('part');
+        const Number : any = await AsyncStorage.getItem('schNum');
+        if(Name) {
+          setUserName(Name); 
+          setUserSchool(School);
+          setUserPart(Part);
+          setUserSchNum(Number);
+        } else {
+          return
+        }
       } catch (error) {
         console.log('데이터 가져오기 실패:', error);
       }  
@@ -28,12 +41,18 @@ function AddCommentModal(props : any) {
   const addComment = () => {
     const postId = props.selectedPost.id;
     const time = new Date().toISOString();
-    if (props.name || props.school) {
+    if (userName || userSchool) {
       axios
-        .post(`${MainURL}/board/comments`, { postId, commentText, school: props.school, name: props.name, time })
+        .post(`${MainURL}/board/comments`, { 
+          postId, commentText, time, 
+          userName: userName, userSchool: userSchool,
+          userSchNum: userSchNum, userPart: userPart
+        })
         .then((res) => {
-          Alert.alert('입력되었습니다.');
-          setCommentText('');
+          if(res.data) {
+            Alert.alert('입력되었습니다.');
+            setCommentText('');
+          }
         })
         .catch((error) => {
           console.error(error);
@@ -49,8 +68,13 @@ function AddCommentModal(props : any) {
         <View style={styles.addTitleBox}>
           <Text style={styles.addTitleText}>댓글 달기</Text>
           <View style={styles.addTitleTextbox}>
-            <Text style={styles.addTitleText2}>{school}</Text>
-            <Text style={styles.addTitleText2}>{name}</Text>
+            <Text style={styles.addTitleText2}>
+              <FontAwesome name="pencil-square-o" size={20} color="black" />
+            </Text>
+            <Text style={styles.addTitleText2}>{userSchool}</Text>
+            <Text style={styles.addTitleText2}>{userSchNum}</Text>
+            <Text style={styles.addTitleText2}>{userPart}</Text>
+            <Text style={styles.addTitleText2}>{userName}</Text>
           </View>
         </View>
         <TextInput
