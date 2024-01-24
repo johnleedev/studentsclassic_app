@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">성악하는대학생들</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">E4xLoxLgbvuLhA_xCJoogJM6HWP3358QhtFsl</string>
+    <string name="kakao_app_key">9c78b601999b1fa36bbaf0977ef684be</string>
+</resources>

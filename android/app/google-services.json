@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "974813465583",
+    "project_id": "studentsclassic",
+    "storage_bucket": "studentsclassic.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:974813465583:android:7f0d434f9d88926064841a",
+        "android_client_info": {
+          "package_name": "com.studentsclassic.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "974813465583-k12r64s7gs1dncsrhrsuutlha3t6gtcp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.studentsclassic.app",
+            "certificate_hash": "4b3c5f3058258aff45e58ae405d2f28a17c3e05a"
+          }
+        },
+        {
+          "client_id": "974813465583-4i66dlfouubovv2oho4bdhq29hciigsp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZNqvIS-7LsIIeeihPNwtu725nM3gGX8A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "974813465583-2t8gdd1m1kvteni9elseatikqfs96f2l.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "974813465583-albn62lq9c284hbuipe0mjhac334q3pi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.studentsclassic.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
