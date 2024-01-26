@@ -6,6 +6,9 @@ import axios from 'axios'
 import MainURL from "../../MainURL";
 import AsyncGetItem from '../AsyncGetItem'
 import { Typography } from '../Components/Typography';
+import { Title } from '../Components/Title';
+import { Divider } from '../Components/Divider';
+import { ButtonBox } from '../Components/ButtonBox';
 
 function DeleteAccount (props: any) {
 
@@ -31,10 +34,15 @@ function DeleteAccount (props: any) {
   };
 
   const handelAction = () => {
-    Alert.alert('정말 탈퇴 하시겠습니까?', '탈퇴 시 유의사항을 충분히 확인하시기 바랍니다.', [
-      { text: '취소', onPress: () => props.navigation.pop() },
-      { text: '탈퇴', onPress: () => deleteAccount() }
-    ]);
+    if (check) {
+      Alert.alert('정말 탈퇴 하시겠습니까?', '탈퇴 시 유의사항을 충분히 확인하시기 바랍니다.', [
+        { text: '취소', onPress: () => props.navigation.pop() },
+        { text: '탈퇴', onPress: () => deleteAccount() }
+      ]);
+    } else {
+      Alert.alert('확인 버튼을 눌러야 힙니다.')
+    }
+    
   };
 
   const deleteAccount = async () => {
@@ -67,8 +75,18 @@ function DeleteAccount (props: any) {
     AsyncStorage.removeItem('URL');
   };
 
+
+  const handleClose = () => {
+    props.navigation.goBack();
+  };
+
   return (
     <View style={styles.container}>
+
+      {/* title */}
+      <Title title='탈퇴하기' enTitle='DeleteAccount'/>
+      <Divider/>
+
       <View style={styles.titleContainer}>
         <Typography marginBottom={10}>탈퇴시 모든 정보가 사라지며, 복구할 수 없습니다.</Typography>
       </View> 
@@ -81,36 +99,36 @@ function DeleteAccount (props: any) {
         
         <View style={styles.noticeBox}>
           <View style={styles.noticeTextBox}>
-            <Typography marginBottom={10}>1. 회원 탈퇴 시, 즉시 탈퇴 처리되며, 서비스 이용이 불가합니다. </Typography>
-            <Typography marginBottom={10}>2. 기존에 작성한 게시물 및 댓글은 자동으로 삭제되지 않습니다. 
+            <Typography marginBottom={10} fontWeightIdx={2}>1. 회원 탈퇴 시, 즉시 탈퇴 처리되며, 서비스 이용이 불가합니다. </Typography>
+            <Typography marginBottom={10} fontWeightIdx={2}>2. 기존에 작성한 게시물 및 댓글은 자동으로 삭제되지 않습니다. 
               또한 탈퇴 이후에는 작성자 본인을 확인할 수 없으므로, 삭제 처리도 불가합니다.</Typography>
-            <Typography>3. 회원 정보는 탈퇴 즉시 삭제되지만, 부정 이용 거래 방지 및 전자상거래법 등
+            <Typography fontWeightIdx={2}>3. 회원 정보는 탈퇴 즉시 삭제되지만, 부정 이용 거래 방지 및 전자상거래법 등
               관련 법령에 따라, 보관이 필요할 경우 해당 기간 동안 회원 정보가 보관 될 수 있습니다.</Typography>
           </View>
 
-          <View style={styles.checkButtonBox}>
-            <TouchableOpacity
-              hitSlop={{ top: 15, bottom: 15 }}
-              style={styles.checkButton}
-              onPress={handelCheck}
-            >
-              {
-                check ? <AntDesign name="checkcircle" size={20} color="red" />
-               : <AntDesign name="checkcircleo" size={20} color="black" />
-              }
-            </TouchableOpacity> 
-            <Typography fontSize={20}> 위 유의사항을 확인하였습니다.</Typography>
-          </View>
-
-          <View style={styles.actionButtonBox}>
-              <TouchableOpacity 
-              style={[styles.actionButton, check ? { backgroundColor : 'red' } : { backgroundColor : 'gray' }]} 
-              onPress={handelAction}
-              >
-              <Typography color='#fff'>회원 탈퇴</Typography>
-            </TouchableOpacity>
-          </View>
         </View>
+
+        <View style={styles.checkButtonBox}>
+          <TouchableOpacity
+            hitSlop={{ top: 15, bottom: 15 }}
+            style={styles.checkButton}
+            onPress={handelCheck}
+          >
+          <View style={{flexDirection:'row', alignItems:'center'}}>
+            {
+              check ? <AntDesign name="checkcircle" size={20} color="red" />
+            : <AntDesign name="checkcircleo" size={20} color="black" />
+            }
+            <Typography fontSize={20}>  위 유의사항을 확인하였습니다.</Typography>
+          </View>
+          </TouchableOpacity> 
+        </View>
+
+        <View style={styles.actionButtonBox}>
+          <ButtonBox leftFunction={handleClose} leftText='취소' rightFunction={handelAction} rightText='탈퇴'/>
+        </View>
+        
+
       </View>
     </View>
   );
@@ -121,8 +139,7 @@ export default DeleteAccount;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-    backgroundColor: 'white'
+    backgroundColor: '#fff'
   },
   titleContainer: {
     height: 80,
@@ -134,6 +151,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   noticeBox: {
+    flex: 1,
     alignItems: 'center',
     marginTop: 10,
   },
@@ -141,9 +159,11 @@ const styles = StyleSheet.create({
     marginVertical: 15
   },
   checkButtonBox: {
+    width: '100%',
     height: 100,
     alignItems: 'center',
-    flexDirection: 'row'
+    justifyContent:'center',
+    flexDirection: 'row',
   },
   checkButton: {
 
@@ -152,10 +172,13 @@ const styles = StyleSheet.create({
 
   },
   actionButtonBox: {
-    width: 300,
+    width: '100%',
     justifyContent: 'center',
+    alignItems:'center',
+    marginBottom:20
   },
   actionButton: {
+    width: 300,
     padding: 12,
     borderRadius: 8,
     alignItems: 'center',

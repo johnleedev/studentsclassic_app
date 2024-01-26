@@ -62,7 +62,7 @@ export default function Notification (props : any) {
               style={{marginVertical: 10, borderWidth:1, borderColor:'#BDBDBD', borderRadius:10, padding:10}} 
             >
               <Typography marginBottom={5}>{item.notifiTitle}</Typography>
-              <Typography fontSize={14} fontWeight='normal'>{item.notifiMessage}</Typography>
+              <Typography fontSize={14} fontWeightIdx={2}>{item.notifiMessage}</Typography>
               <View style={{width:'100%', alignItems:'flex-end'}}>
                 <Typography fontSize={12} color='#8C8C8C'>{DateFormmating(item.date)}</Typography>
               </View>
@@ -84,7 +84,7 @@ export default function Notification (props : any) {
               style={{marginVertical: 10, borderWidth:1, borderColor:'#BDBDBD', borderRadius:10, padding:10}} 
             >
               <Typography marginBottom={5}>{item.notifiTitle}</Typography>
-              <Typography fontSize={14} fontWeight='normal'>{item.notifiMessage}</Typography>
+              <Typography fontSize={14} fontWeightIdx={2}>{item.notifiMessage}</Typography>
               <View style={{width:'100%', alignItems:'flex-end', marginTop:10}}>
                 <Typography fontSize={12} color='#8C8C8C'>{DateFormmating(item.date)}</Typography>
               </View>

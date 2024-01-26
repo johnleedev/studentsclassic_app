@@ -4,8 +4,8 @@ import { StyleSheet, Platform, StatusBar } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import Navi_Home from './Navi_Home';
 import Navi_Board from './Navi_Board';
-import Navi_Competition from './Navi_Competition';
 import Navi_MyPage from './Navi_MyPage';
+import Navi_Study from './Navi_Study';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {checkNotifications, requestNotifications} from 'react-native-permissions';
@@ -13,10 +13,9 @@ import messaging from '@react-native-firebase/messaging';
 import axios from "axios";
 import MainURL from "../MainURL";
 import AsyncGetItem from './AsyncGetItem'
-import Navi_Info from './Navi_Info';
 import { useRoute } from '@react-navigation/native';
 import MainVersion from '../MainVersion';
-import Navi_Lyrics from './Navi_Lyrics';
+
 
 const Tab = createBottomTabNavigator();
 
@@ -97,7 +96,8 @@ export default function Main (props : any) {
         headerShown : false,
         tabBarShowLabel : false,
         tabBarStyle: Platform.OS === 'android' ? styles.barStyle_android : styles.barStyle_ios,
-        tabBarActiveTintColor : '#CC5A57'
+        tabBarActiveTintColor : '#CC5A57',
+        unmountOnBlur: true
       }}
     >
       <Tab.Screen name="Navi_Home" component={Navi_Home}
@@ -106,24 +106,12 @@ export default function Main (props : any) {
           <Ionicons name="home" size={24} color={ focused ? "#000" : "#BDBDBD" }/>
         }}
       />
-      <Tab.Screen  name='Navi_Lyrics' component={Navi_Lyrics}
+      <Tab.Screen  name='Navi_Study' component={Navi_Study}
         options={{
           tabBarIcon:({focused})=> 
-          <Ionicons name="mic" size={24} color={ focused ? "#000" : "#BDBDBD" }/>
+          <Ionicons name="document-text-outline" size={24} color={ focused ? "#000" : "#BDBDBD" }/>
         }}
       />
-      {/* <Tab.Screen  name='Navi_Competition' component={Navi_Competition}
-        options={{
-          tabBarIcon:({focused})=> 
-          <Ionicons name="mic" size={24} color={ focused ? "#000" : "#BDBDBD" }/>
-        }}
-      /> */}
-      {/* <Tab.Screen  name='Navi_Info' component={Navi_Info}
-        options={{
-          tabBarIcon:({focused})=> 
-          <Ionicons name="information-circle-sharp" size={24} color={ focused ? "#000" : "#BDBDBD" }/>
-        }}
-      /> */}
       <Tab.Screen name='Navi_Board' component={Navi_Board}
         options={{
           tabBarIcon:({focused})=> 

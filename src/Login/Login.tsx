@@ -11,6 +11,7 @@ import jwt_decode from 'jwt-decode';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 import GoogleWebClientID from "./GoogleWebClientID";
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default function Login (props : any) {
   
@@ -185,6 +186,14 @@ export default function Login (props : any) {
                style={{width: '40%', height: '40%', resizeMode:'center'}} />
             </TouchableOpacity>
           }      
+        </View>
+
+        <View style={{width:'100%', height:20, alignItems:'flex-start', marginLeft:10}}>
+          <TouchableOpacity
+            onPress={()=>{props.navigation.navigate("Admin");}}
+          >
+            <Ionicons name="information-circle-outline"/>
+          </TouchableOpacity>
         </View>
 
         

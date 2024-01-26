@@ -11,7 +11,6 @@ import AsyncGetItem from '../AsyncGetItem'
 import { Typography } from '../Components/Typography';
 import { Title } from '../Components/Title';
 import { Divider } from '../Components/Divider';
-import MyAddInfoRevise from './MyAddInfoRevise';
 import axios from 'axios';
 import MainURL from "../../MainURL";
 import WebView from 'react-native-webview';
@@ -63,76 +62,53 @@ function MyPageMain (props: any) {
     props.navigation.navigate("DeleteAccount")
   };
   
-  // 프로필 추가 수정하기 모달
-  const [isProfileReviseModalVisible, setProfileReviseModalVisible] = useState(false);
-  const profileReviseToggleModal = () => {
-    setProfileReviseModalVisible(!isProfileReviseModalVisible);
-  };
-
-  // 사진 보기 모달
-  const [selectedPhoto, setSelectedPhoto] = useState('');
-  const [isViewPhotoModalVisible, setViewPhotoModalVisible] = useState(false);
-  const viewPhotoToggleModal = () => {
-    setViewPhotoModalVisible(!isViewPhotoModalVisible);
-  };
 
   return (
-    <View style={{flex:1}}>
-    <ScrollView style={styles.container}>
-      
+    <View style={{flex:1, backgroundColor:'#fff'}}>
+
       <Title title='마이페이지' enTitle='My Page' />
       
       <Divider height={2} />
+
+      <ScrollView style={styles.container}>
+      
       <View style={styles.section}>
         <Typography fontSize={24}>기본 정보</Typography>
         <View style={styles.infoBox}>
           <View style={styles.infoTextBox}>
-            <Typography marginBottom={10} fontWeight='normal'>
+            <Typography marginBottom={10} fontWeightIdx={2}>
+              <Entypo name="beamed-note" size={16} color="black"/> 계정: {asyncGetData.userAccount}
+            </Typography>
+            <Typography marginBottom={10} fontWeightIdx={2}>
               <Entypo name="beamed-note" size={16} color="black"/> 이름: {asyncGetData.userName}
             </Typography>
-            <Typography marginBottom={10} fontWeight='normal'>
+            <Typography marginBottom={10} fontWeightIdx={2}>
               <Entypo name="beamed-note" size={16} color="black"/> 학교: {asyncGetData.userSchool}
             </Typography>
-            <Typography marginBottom={10} fontWeight='normal'>
-              <Entypo name="beamed-note" size={16} color="black"/> 학번: <Text style={{fontWeight: '500'}}>{asyncGetData.userSchNum}</Text>
+            <Typography marginBottom={10} fontWeightIdx={2}>
+              <Entypo name="beamed-note" size={16} color="black"/> 학번: {asyncGetData.userSchNum}
             </Typography>
-            <Typography marginBottom={10} fontWeight='normal'>
-              <Entypo name="beamed-note" size={16} color="black"/> 파트: <Text style={{fontWeight: '500'}}>{asyncGetData.userPart}</Text>
+            <Typography marginBottom={10} fontWeightIdx={2}>
+              <Entypo name="beamed-note" size={16} color="black"/> 파트: {asyncGetData.userPart}
             </Typography>
-            <Typography marginBottom={10} fontWeight='normal'>
-              <Entypo name="beamed-note" size={16} color="black"/> 로그인 방식: <Text style={{fontWeight: '500'}}>{asyncGetData.userURL}</Text>
+            <Typography marginBottom={10} fontWeightIdx={2}>
+              <Entypo name="beamed-note" size={16} color="black"/> 로그인 방식: {asyncGetData.userURL}
             </Typography>
           </View>
         </View>
       </View>
 
-      <Divider height={2}/>
-     
-      <Modal
-        animationType="slide" 
-        transparent={true}
-        visible={isProfileReviseModalVisible}
-        onRequestClose={profileReviseToggleModal}
-      >
-        <MyAddInfoRevise 
-          profileReviseToggleModal={profileReviseToggleModal}
-          asyncGetData={asyncGetData}
-          refresh={refresh}
-          setRefresh={setRefresh}
-          getProfile={getProfile}
-        />
-      </Modal>
 
       <Divider height={2}/>
 
       <View style={styles.section}>
-        <Text style={styles.bottomTitle}>기타</Text>
+        <Typography fontSize={24} marginBottom={10}>기타</Typography>
         <TouchableOpacity style={styles.bottomButton} onPress={()=>{
            props.navigation.navigate("Notice");
         }}>
           <Feather name="clipboard" size={20} color="black" style={{marginRight:15}}/>
           <View style={styles.bottomButtonRow}>
-            <Typography color='#555' fontWeight='normal'>공지사항</Typography>
+            <Typography color='#555' fontWeightIdx={2}>공지사항</Typography>
             <AntDesign name="right" size={15} color="black" />
           </View>
         </TouchableOpacity>
@@ -141,7 +117,7 @@ function MyPageMain (props: any) {
         }}>
           <AntDesign name="questioncircleo" size={20} color="black" style={{marginRight:15}}/>
           <View style={styles.bottomButtonRow}>
-            <Typography color='#555' fontWeight='normal'>문의하기</Typography>
+            <Typography color='#555' fontWeightIdx={2}>문의하기</Typography>
             <AntDesign name="right" size={15} color="black" />
           </View>
         </TouchableOpacity>
@@ -150,34 +126,34 @@ function MyPageMain (props: any) {
         }}>
           <MaterialCommunityIcons name="bullhorn-variant-outline" size={20} color="black" style={{marginRight:15}}/>
           <View style={styles.bottomButtonRow}>
-            <Typography color='#555' fontWeight='normal'>신고하기</Typography>
+            <Typography color='#555' fontWeightIdx={2}>신고하기</Typography>
             <AntDesign name="right" size={15} color="black" />
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.bottomButton} onPress={()=>{
            props.navigation.navigate("Advertising");
         }}>
-          <MaterialCommunityIcons name="advertisements" size={20} color="black" style={{marginRight:15}}/>
+          <MaterialCommunityIcons name="advertisements" size={20} color="black" style={{marginRight:13}}/>
           <View style={styles.bottomButtonRow}>
-            <Typography color='#555' fontWeight='normal'>광고 및 제휴</Typography>
+            <Typography color='#555' fontWeightIdx={2}>광고 및 제휴</Typography>
             <AntDesign name="right" size={15} color="black" />
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.bottomButton} onPress={()=>{
           props.navigation.navigate("Policy");
         }}>
-          <MaterialIcons name="policy" size={20} color="black" style={{marginRight:15}}/>
+          <MaterialIcons name="policy" size={20} color="black" style={{marginRight:13}}/>
           <View style={styles.bottomButtonRow}>
-            <Typography color='#555' fontWeight='normal'>약관 및 정책</Typography>
+            <Typography color='#555' fontWeightIdx={2}>약관 및 정책</Typography>
             <AntDesign name="right" size={15} color="black" />
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.bottomButton} onPress={()=>{
           props.navigation.navigate("PersonInfo");
         }}>
-          <Entypo name="info" size={20} color="black" style={{marginRight:15}}/>
+          <Entypo name="info" size={20} color="black" style={{marginRight:12}}/>
           <View style={styles.bottomButtonRow}>
-            <Typography color='#555' fontWeight='normal'>개인정보처리방침</Typography>
+            <Typography color='#555' fontWeightIdx={2}>개인정보처리방침</Typography>
             <AntDesign name="right" size={15} color="black" />
           </View>
         </TouchableOpacity>
@@ -186,7 +162,7 @@ function MyPageMain (props: any) {
         }}>
           <FontAwesome name="building-o" size={20} color="black" style={{marginRight:15}}/>
           <View style={styles.bottomButtonRow}>
-            <Typography color='#555' fontWeight='normal'>사업자정보</Typography>
+            <Typography color='#555' fontWeightIdx={2}>사업자정보</Typography>
             <AntDesign name="right" size={15} color="black" />
           </View>
         </TouchableOpacity>
@@ -198,7 +174,7 @@ function MyPageMain (props: any) {
           onPress={handleLogout}
           style={styles.logoutButton}
         >
-          <Text style={styles.logoutButtonText}>로그아웃</Text>
+          <Typography color='#8C8C8C'>로그아웃</Typography>
         </TouchableOpacity> 
       </View>
 
@@ -207,7 +183,9 @@ function MyPageMain (props: any) {
         style={styles.deleteAccountContainer}
         onPress={deleteAccount}
       >
-        <Text style={styles.deleteAccountText}>회원탈퇴를 하시려면 여기를 눌러주세요</Text>
+        <View style={{padding:5, borderWidth:1, borderColor:'#EAEAEA', borderRadius:5}}>
+          <Typography fontSize={10} fontWeightIdx={1} color='#8C8C8C'>회원탈퇴를 하시려면 여기를 눌러주세요</Typography>
+        </View>
       </TouchableOpacity> 
 
       <View style={{marginBottom: 30, alignItems:'flex-end', marginRight:20}}>
@@ -217,8 +195,7 @@ function MyPageMain (props: any) {
       </View>
 
     </ScrollView>
-
-    <View style={isViewPhotoModalVisible ? styles.modalBackCover :  { display: 'none'}}></View>
+   
     </View>
   )
 };
@@ -275,11 +252,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#ddd',
   },
-  bottomTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
   bottomButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -302,23 +274,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ddd',
   },
-  logoutButtonText: {
-    color: 'gray',
-    fontSize: 16,
-    fontWeight: 'bold',
-    textDecorationLine: 'underline'
-  },
   deleteAccountContainer : {
     flex: 1,
     alignItems: 'flex-end',
     justifyContent: 'center',
     marginRight: 20,
     height: 50,
-  },
-  deleteAccountText: {
-    color: 'gray',
-    textDecorationLine:'underline',
-    fontSize: 12
   },
   modalBackCover : {
     position: 'absolute',

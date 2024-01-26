@@ -23,7 +23,7 @@ export const SubTitle :React.FC<{
         </TouchableOpacity>
       </View>
       <View style={{flex:2, alignItems:'center'}}>
-        <Typography fontSize={22} fontWeight='bold'>{props.title}</Typography>
+        <Typography fontSize={22}>{props.title}</Typography>
       </View>
       <View style={{flex:1, alignItems:'flex-end'}}>
         <Typography color='#C9AE00' fontSize={12} >{props.enTitle}</Typography>

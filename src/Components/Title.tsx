@@ -12,7 +12,7 @@ export const Title :React.FC<{
   return (
     <View style={{marginTop:15, paddingHorizontal: props.paddingHorizontal ?? 20, paddingVertical : props.paddingVertical ?? 10}}>
       <View style={{flexDirection:'row', alignItems:'flex-end', justifyContent:'space-between', marginBottom:5}}>
-        <Typography fontSize={22} fontWeight='bold'>{props.title}</Typography>
+        <Typography fontSize={22}>{props.title}</Typography>
         <Typography color='#C9AE00' fontSize={14} >{props.enTitle}</Typography>
       </View>
     </View>

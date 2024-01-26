@@ -3,6 +3,7 @@ import { View, TextInput, TouchableOpacity, Text, StyleSheet, ScrollView, Image,
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import { Typography } from '../Components/Typography';
+import { Divider } from '../Components/Divider';
 
 function Logister (props : any) {
 
@@ -74,15 +75,9 @@ function Logister (props : any) {
 
   return (
     <View style={Platform.OS === 'android' ? styles.android : styles.ios}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 50}
-        style={{flex:1}}
-      >
+      <View style={{flex:1, backgroundColor:'#fff'}}>
 
-      <ScrollView style={styles.container}>
-      
-        <View style={{alignItems: 'center', marginVertical: 20, justifyContent: 'center'}}>
+        <View style={{padding:20, alignItems: 'center', marginTop: 10, justifyContent: 'center'}}>
           <TouchableOpacity
             style={styles.backButton}
             onPress={()=>{
@@ -93,72 +88,86 @@ function Logister (props : any) {
           </TouchableOpacity>
           <Typography>회원가입</Typography>
         </View>
-        
-        <View style={{flex:1, marginVertical: 20}}>
-          <View style={{flexDirection:'row', marginVertical:10}}>
-            <View style={{width:40, height:50, alignItems: 'center'}}>
-              <Image source={require('../images/login/note2_1.png')} style={{width:12, height:20}}/>
-              <Typography fontSize={24} fontWeight='600'>01</Typography>  
-            </View>
-            <View style={{marginHorizontal:10}}>
-              <View style={{width:40, height:33}}></View>
-              <View style={{width:40, height:2, backgroundColor: '#ccc'}}></View>
-            </View>
-            <View style={{width:40, height:50, alignItems: 'center'}}>
-              <Image source={require('../images/login/note2_2.png')} style={{width:12, height:20}}/>
-              <Typography fontSize={24} fontWeight='600' color='#ccc'>02</Typography>  
-            </View>
-          </View>
-          <Typography fontSize={22} fontWeight='600'>
-            회원정보 확인을 위해{'\n'}
-            기본정보를 입력해 주세요.
-          </Typography>
-        </View>
-        
-        <View style={{flex:2}}>
-          <Typography color='#8C8C8C' fontWeight='600'>이메일 주소 <Typography color='#E94A4A'>*</Typography></Typography>
-          <View style={{flexDirection:'row'}}>
-            <View style={{width:21, height:40, justifyContent:'flex-end'}}>
-              { userURL === 'kakao' && <Image source={require('../images/login/kakao.png')} style={{width:20, height:20}}/>}
-              { userURL === 'naver' && <Image source={require('../images/login/naver.png')} style={{width:20, height:20}}/>}
-              { userURL === 'apple' && <Image source={require('../images/login/apple.png')} style={{width:20, height:20}}/>}
-              { userURL === 'google' 
-                && <View style={{alignItems: 'center', justifyContent: 'center', width: 20, height: 20,
-                      marginHorizontal: 5, borderRadius:28, borderWidth:1, borderColor: '#BDBDBD'}} >
-                  <Image source={require('../images/login/google.png')} 
-                      style={{width: '40%', height: '40%', resizeMode:'center'}}/>
-                  </View>}
-            </View>
-            <TextInput
-              style={[styles.input, {width: '94%'}]}
-              placeholder="e-mail"
-              placeholderTextColor='#5D5D5D'
-              onChangeText={onChangeUserAccount}
-              value={userAccount}
-            />
-          </View>
-          {userAccount.length > 0 && (
-            <Text style={[styles.message, isUserAccount ? styles.success : styles.error]}>
-              {userAccountMessage}
-            </Text>
-          )}
 
-          <Typography color='#8C8C8C' fontWeight='600'>이름 <Typography color='#E94A4A'>*</Typography></Typography>
-          <TextInput
-            style={[styles.input, {width: '100%'}]}
-            placeholder="이름"
-            placeholderTextColor='#5D5D5D'
-            onChangeText={onChangeUserName}
-            value={userName}
-          />
-          {userName.length > 0 && (
-            <Text style={[styles.message, isUserName ? styles.success : styles.error]}>
-              {userNameMessage}
-            </Text>
-          )}
-        </View>
-            
-        <TouchableOpacity 
+        <Divider/>
+
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 50}
+          style={{flex:1}}
+        >
+
+        <ScrollView style={styles.container}>
+          
+          <View style={{flex:1, marginBottom:20}}>
+            <View style={{flexDirection:'row'}}>
+              <View style={{width:40, height:50, alignItems: 'center', marginBottom:10}}>
+                <Image source={require('../images/login/note2_1.png')} style={{width:12, height:20}}/>
+                <Typography fontSize={24} fontWeightIdx={1}>01</Typography>  
+              </View>
+              <View style={{marginHorizontal:10}}>
+                <View style={{width:40, height:33}}></View>
+                <View style={{width:40, height:2, backgroundColor: '#ccc'}}></View>
+              </View>
+              <View style={{width:40, height:50, alignItems: 'center'}}>
+                <Image source={require('../images/login/note2_2.png')} style={{width:12, height:20}}/>
+                <Typography fontSize={24} fontWeightIdx={1} color='#ccc'>02</Typography>  
+              </View>
+            </View>
+            <Typography fontSize={22} fontWeightIdx={1}>
+              회원정보 확인을 위해{'\n'}
+              기본정보를 입력해 주세요.
+            </Typography>
+          </View>
+          
+          <View style={{flex:2}}>
+            <Typography color='#8C8C8C' fontWeightIdx={1}>이메일 주소 <Typography color='#E94A4A'>*</Typography></Typography>
+            <View style={{flexDirection:'row'}}>
+              <View style={{width:21, height:40, justifyContent:'flex-end'}}>
+                { userURL === 'kakao' && <Image source={require('../images/login/kakao.png')} style={{width:20, height:20}}/>}
+                { userURL === 'naver' && <Image source={require('../images/login/naver.png')} style={{width:20, height:20}}/>}
+                { userURL === 'apple' && <Image source={require('../images/login/apple.png')} style={{width:20, height:20}}/>}
+                { userURL === 'google' 
+                  && <View style={{alignItems: 'center', justifyContent: 'center', width: 20, height: 20,
+                        marginHorizontal: 5, borderRadius:28, borderWidth:1, borderColor: '#BDBDBD'}} >
+                    <Image source={require('../images/login/google.png')} 
+                        style={{width: '40%', height: '40%', resizeMode:'center'}}/>
+                    </View>}
+              </View>
+              <TextInput
+                style={[styles.input, {width: '94%'}]}
+                placeholder="e-mail"
+                placeholderTextColor='#5D5D5D'
+                onChangeText={onChangeUserAccount}
+                value={userAccount}
+              />
+            </View>
+            {userAccount.length > 0 && (
+              <Text style={[styles.message, isUserAccount ? styles.success : styles.error]}>
+                {userAccountMessage}
+              </Text>
+            )}
+
+            <Typography color='#8C8C8C' fontWeightIdx={1}>이름 <Typography color='#E94A4A'>*</Typography></Typography>
+            <TextInput
+              style={[styles.input, {width: '100%'}]}
+              placeholder="이름"
+              placeholderTextColor='#5D5D5D'
+              onChangeText={onChangeUserName}
+              value={userName}
+            />
+            {userName.length > 0 && (
+              <Text style={[styles.message, isUserName ? styles.success : styles.error]}>
+                {userNameMessage}
+              </Text>
+            )}
+          </View>
+
+        </ScrollView>
+        </KeyboardAvoidingView>
+        
+        <View style={{padding:20}}>
+          <TouchableOpacity 
             onPress={goLogister2Page}
             style={
               userAccount && userName ? [styles.nextBtnBox, { backgroundColor: 'black'}] 
@@ -166,10 +175,10 @@ function Logister (props : any) {
             }
             >
             <Text style={styles.nextBtnText}>다음</Text>
-        </TouchableOpacity>
-              
-      </ScrollView>
-      </KeyboardAvoidingView>
+          </TouchableOpacity>
+        </View>
+        
+      </View>
     </View>
   );
 };
@@ -191,8 +200,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position:'absolute',
-    top: 0,
-    left: 0,
+    top: 20,
+    left: 20,
     width: 30,
     height: 30,
   },

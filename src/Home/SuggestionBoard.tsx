@@ -93,13 +93,12 @@ export default function SuggestionBoard (props : any) {
 
   return (
     <View style={styles.container}>
-      <Title title='운영 제안 게시판' enTitle='Suggestion'/>
+      <Title title='건의하기' enTitle='Suggestion'/>
       <View style={styles.section}>
       <View style={[styles.addSuggestionContainer]}>
         <View style={styles.addTitleBox}>
           <Typography marginBottom={4} color='#8C8C8C' fontSize={12}>
-            '성악하는대학생들' 어플 운영에 관한 제안을 해주세요.
-            매달 가장 좋은 제안을 해주신 분을 선정하여 소정의 상품을 드립니다.
+            '성악하는대학생들' 어플 운영에 관한 제안을, 자유롭게 건의해주세요.
           </Typography>
         </View>
         <TextInput
@@ -124,12 +123,12 @@ export default function SuggestionBoard (props : any) {
           </TouchableOpacity>
         </View>
         <Divider height={2} marginVertical={15}/>
-        <Typography marginBottom={20} color='#8C8C8C' fontSize={12}>* 제안 목록 (최근 10개의 게시글만 보여집니다.)</Typography>
+        <Typography marginBottom={20} color='#8C8C8C' fontSize={12}>* 건의 목록 (최근 5개의 게시글만 보여집니다.)</Typography>
         {
-          suggestionToShow.map((item:any, index:any)=>{
+          suggestionToShow.slice(0,5).map((item:any, index:any)=>{
             return(
               <View key={index} style={{minHeight:50}}>
-                <Typography marginBottom={10} fontWeight='normal'>{item.content}</Typography>
+                <Typography marginBottom={10} fontWeightIdx={2}>{item.content}</Typography>
                 <View style={{flexDirection:'row', justifyContent:'space-between'}}>
                   <Typography color='#8C8C8C' fontSize={12}>{DateFormmating(item.date)}</Typography>
                   <View style={{flexDirection:'row', marginBottom:5}}>

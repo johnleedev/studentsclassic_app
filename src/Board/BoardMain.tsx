@@ -107,19 +107,19 @@ function BoardMain(props: any) {
   const [postListNum, setPostListNum] = useState<number>(5);
 
   return (
-    <View style={{flex:1}}>
+    <View style={{flex:1, backgroundColor:'#fff'}}>
+
+      {/* title */}
+      <Title title='자유게시판' enTitle='Community'/>
+                
+      <Divider height={2} />
+
       <ScrollView 
         style={styles.container}
         refreshControl={
           <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
         }  
       >
-
-        {/* title */}
-        <Title title='자유게시판' enTitle='Community'/>
-                
-        <Divider height={2} />
-
         <View style={styles.section}>
           <View style={styles.postBox}>
           <Typography fontSize={20} marginBottom={10}>내 글</Typography>
@@ -143,7 +143,7 @@ function BoardMain(props: any) {
                     </View>
                     <View style={{marginBottom:10}}>
                       <Typography marginBottom={8}>{renderPreview(post.title)}</Typography>
-                      <Typography fontSize={14} marginBottom={5} fontWeight='normal'>{renderPreview(post.content)}</Typography>
+                      <Typography fontSize={14} marginBottom={5} fontWeightIdx={2}>{renderPreview(post.content)}</Typography>
                     </View>
                     <View style={styles.postFooter}>
                       <Typography fontSize={12} color='#8C8C8C'>{DateFormmating(post.date)}</Typography>
@@ -153,7 +153,7 @@ function BoardMain(props: any) {
                   </TouchableOpacity>
                 )
               })
-            ) : ( <Typography fontWeight='normal'>작성된 글이 없습니다.</Typography>
+            ) : ( <Typography fontWeightIdx={2}>작성된 글이 없습니다.</Typography>
             )}
           </View>
         </View>
@@ -174,7 +174,7 @@ function BoardMain(props: any) {
             </View>
             <View style={{marginBottom:10}}>
               <Typography marginBottom={8}>{notice.title}</Typography>
-              <Typography fontSize={14} marginBottom={5} fontWeight='normal'>{notice.content}</Typography>
+              <Typography fontSize={14} marginBottom={5} fontWeightIdx={2}>{notice.content}</Typography>
             </View>
             <View style={styles.postFooter}>
               <Typography fontSize={12} color='#8C8C8C'>{DateFormmating(notice.date)}</Typography>
@@ -200,7 +200,7 @@ function BoardMain(props: any) {
                     </View>
                     <View style={{marginBottom:10}}>
                       <Typography marginBottom={8}>{renderPreview(post.title)}</Typography>
-                      <Typography fontSize={14} marginBottom={5} fontWeight='normal'>{renderPreview(post.content)}</Typography>
+                      <Typography fontSize={14} marginBottom={5} fontWeightIdx={2}>{renderPreview(post.content)}</Typography>
                     </View>
                     <View style={styles.postFooter}>
                       <Typography fontSize={12} color='#8C8C8C'>{DateFormmating(post.date)}</Typography>

@@ -17,15 +17,15 @@ export const ButtonBox :React.FC<{
           
       <View style={styles.ButtonBox}>
         <TouchableOpacity 
-          style={styles.Button} 
+          style={[styles.Button, {borderColor: '#8C8C8C'}]} 
           onPress={props.leftFunction}>
-          <Typography>{props.leftText}</Typography>
+          <Typography color='#8C8C8C'>{props.leftText}</Typography>
         </TouchableOpacity>
       </View>
 
       <View style={styles.ButtonBox}>
         <TouchableOpacity 
-          style={styles.Button} 
+          style={[styles.Button, {borderColor: '#333'}]} 
           onPress={props.rightFunction}>
           <Typography>{props.rightText}</Typography>
         </TouchableOpacity>
@@ -45,9 +45,8 @@ const styles = StyleSheet.create({
   Button: {
     width: '90%',
     borderWidth:1, 
-    borderColor: '#333',
     paddingHorizontal: 12,
-    paddingVertical: 15,
+    paddingVertical: 10,
     borderRadius: 10,
     flexDirection:'row',
     alignItems: 'center',

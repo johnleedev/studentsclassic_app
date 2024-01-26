@@ -7,7 +7,6 @@ import Policy from "./MyPage/Notice/Policy";
 import Question from "./MyPage/Notice/Question";
 import PersonInfo from "./MyPage/Notice/PersonInfo";
 import DeleteAccount from "./MyPage/DeleteAccount";
-import MyAddInfoRevise from "./MyPage/MyAddInfoRevise";
 import Report from "./MyPage/Notice/Report";
 
 const Stack = createNativeStackNavigator();
@@ -24,7 +23,6 @@ function Navi_MyPage() {
       <Stack.Screen name={'Policy'} component={Policy}/>
       <Stack.Screen name={'PersonInfo'} component={PersonInfo}/>
       <Stack.Screen name={'DeleteAccount'} component={DeleteAccount}/>
-      <Stack.Screen name={'MyAddInfoRevise'} component={MyAddInfoRevise}/>
       <Stack.Screen name={'Report'} component={Report}/>
     </Stack.Navigator>
   );

@@ -4,10 +4,8 @@ import { StyleSheet, View, Image, Text, TouchableOpacity, ScrollView,
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
-import Schoollist from './Schoollist';
 import { Typography } from '../Components/Typography';
 import AsyncGetItem from '../AsyncGetItem'
-import NewsHomeSreen from './NewsHomeSreen';
 import { Title } from '../Components/Title';
 import Swiper from 'react-native-swiper'
 import MainImageURL from "../../MainImageURL";
@@ -24,12 +22,6 @@ function HomeMain(props : any) {
 
   // 스크롤뷰 리프레쉬
   const [refresh, setRefresh] = useState<boolean>(false);
-  const onRefresh = React.useCallback(() => {
-    setRefresh(true);
-    setTimeout(() => {
-      setRefresh(false);
-    }, 500);
-  }, []);
 
   // AsyncGetData
   const [asyncGetData, setAsyncGetData] = useState<any>({});
@@ -135,11 +127,8 @@ function HomeMain(props : any) {
       >
       <ScrollView 
         style={{flex:1}}
-        refreshControl={
-          <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
-        }
       >
-        <View style={{height:400}}>
+        <View style={{height:300}}>
           <ImageBackground
             source={require("../images/stage.jpeg")}
             style={{width:"100%",height:"100%"}}>
@@ -195,6 +184,39 @@ function HomeMain(props : any) {
           </View>
         <Divider height={5} />
 
+        {/* 스터디 */}
+        <View style={styles.section}>
+          <TouchableOpacity 
+            style={{height:230, borderWidth:1, borderColor:'#8C8C8C', borderRadius:5}}
+            activeOpacity={0.9}
+            onPress={()=>{
+              props.navigation.navigate('Navi_Study', {screen : 'Main'})
+            }}
+          >
+              <ImageBackground 
+               source={require("../images/desk.jpg")}
+               style={{width:"100%",height:"100%", opacity:0.9}}
+              >
+                <View style={{padding:10, width:"100%",height:"100%"}}>
+                  <View style={{backgroundColor:'#fff', width:'100%', padding:10, borderRadius:5}}>
+                    <Typography marginBottom={10}>성악전공 학생들을 위한 특별한 서비스</Typography>  
+                    <Typography fontSize={14} fontWeightIdx={1} marginBottom={3}>새로운 곡의 가사를 해석할때</Typography>
+                    <Typography fontSize={14} fontWeightIdx={1} marginBottom={3}>이전의 불편한 방식은 이제 그만!</Typography>
+                    <Typography fontSize={14} fontWeightIdx={1}>쉽고 편하게 단어 뜻을 찾을수 있어요.</Typography>
+                  </View>
+                  <View style={{backgroundColor:'#fff', paddingHorizontal:10, paddingVertical:5, borderRadius:5,
+                                position:'absolute', bottom:10, right:10, flexDirection:'row', alignItems:'center'}}>
+                    <Typography fontWeightIdx={1}>스터디 바로가기</Typography>
+                    <AntDesign name='right' style={{marginLeft:10}}/>
+                  </View>                
+                </View>
+              </ImageBackground>
+          </TouchableOpacity>
+        </View>
+
+
+        <Divider height={5} />
+
      
         <Title title='최신글' enTitle='Community'/>
         <View style={styles.section}>
@@ -223,6 +245,10 @@ function HomeMain(props : any) {
               })
             }
         </View>
+
+        {/* 건의하기 게시판 */}
+        <SuggestionBoard/>
+
         
     
       </ScrollView>
