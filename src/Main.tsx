@@ -5,8 +5,10 @@ import { getStatusBarHeight } from 'react-native-status-bar-height';
 import Navi_Home from './Navi_Home';
 import Navi_Board from './Navi_Board';
 import Navi_MyPage from './Navi_MyPage';
-import Navi_Study from './Navi_Study';
+import Navi_StudyMajor from './Navi_StudyMajor';
+import Navi_StudyMusic from './Navi_StudyMusic';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {checkNotifications, requestNotifications} from 'react-native-permissions';
 import messaging from '@react-native-firebase/messaging';
@@ -15,6 +17,8 @@ import MainURL from "../MainURL";
 import AsyncGetItem from './AsyncGetItem'
 import { useRoute } from '@react-navigation/native';
 import MainVersion from '../MainVersion';
+import Navi_Mentoring from './Navi_Mentoring';
+
 
 
 const Tab = createBottomTabNavigator();
@@ -106,10 +110,22 @@ export default function Main (props : any) {
           <Ionicons name="home" size={24} color={ focused ? "#000" : "#BDBDBD" }/>
         }}
       />
-      <Tab.Screen  name='Navi_Study' component={Navi_Study}
+      <Tab.Screen  name='Navi_Mentoring' component={Navi_Mentoring}
+        options={{
+          tabBarIcon:({focused})=> 
+          <Ionicons name="people" size={24} color={ focused ? "#000" : "#BDBDBD" }/>
+        }}
+      />
+      <Tab.Screen  name='Navi_StudyMajor' component={Navi_StudyMajor}
         options={{
           tabBarIcon:({focused})=> 
           <Ionicons name="document-text-outline" size={24} color={ focused ? "#000" : "#BDBDBD" }/>
+        }}
+      />
+      <Tab.Screen  name='Navi_StudyMusic' component={Navi_StudyMusic}
+        options={{
+          tabBarIcon:({focused})=> 
+          <Feather name="book" size={24} color={ focused ? "#000" : "#BDBDBD" }/>
         }}
       />
       <Tab.Screen name='Navi_Board' component={Navi_Board}
@@ -138,23 +154,23 @@ const styles = StyleSheet.create({
     paddingTop: getStatusBarHeight()
   },
   barStyle_android: {
-    height: 70,
+    height: 80,
     padding: 5,
     backgroundColor: '#fff',
     elevation: 3,
     borderTopColor: '#8C8C8C',
     borderTopWidth: 0.5,
-    paddingBottom: 10
+    paddingBottom: 20
   },
   barStyle_ios : {
-    height: 70,
+    height: 80,
     padding: 5,
     backgroundColor: '#fff',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
-    paddingBottom: 10
+    paddingBottom: 20
   }
 });
 

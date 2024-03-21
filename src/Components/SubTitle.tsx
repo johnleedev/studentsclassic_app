@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { Typography } from './Typography';
 
 export const SubTitle :React.FC<{
@@ -19,11 +19,11 @@ export const SubTitle :React.FC<{
           onPress={()=>{
             props.navigation.goBack()
           }}>
-           <EvilIcons name="arrow-left" size={30} color="black" />
+           <AntDesign name="left" size={20} color="black" />
         </TouchableOpacity>
       </View>
       <View style={{flex:2, alignItems:'center'}}>
-        <Typography fontSize={22}>{props.title}</Typography>
+        <Typography fontSize={18} fontWeightIdx={1}>{props.title}</Typography>
       </View>
       <View style={{flex:1, alignItems:'flex-end'}}>
         <Typography color='#C9AE00' fontSize={12} >{props.enTitle}</Typography>

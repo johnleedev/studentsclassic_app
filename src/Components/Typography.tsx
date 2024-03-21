@@ -8,13 +8,13 @@ export const Typography:React.FC<{
     color?:string,
     fontSize?:number,
     marginBottom?:number,
-    children:React.ReactElement | any | React.ReactElement[]
+    children:React.ReactElement | any | React.ReactElement[],
 }> = (props)=>{
     
   return (
     <RNText 
       style={{
-        fontFamily: fontFamilies[props.fontWeightIdx ?? 0],
+        fontFamily: fontFamilies[props.fontWeightIdx ?? 2],
         color: props.color ?? '#000',
         fontSize: props.fontSize ?? 16,
         marginBottom: props.marginBottom ?? null,

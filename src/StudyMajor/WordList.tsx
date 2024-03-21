@@ -20,13 +20,19 @@ export default function WordList (props : any) {
   const [words, setWords] = useState<WordsProps[]>([]);
   const [nation, setNation] = useState<string>('Itary');
   const [alphabet, setAlphabet] = useState<string>('A');
-
+  const [isResdataFalse, setIsResdataFalse] = useState<boolean>(false);
+  
   const fetchPosts = () => {
     axios.get(`${MainURL}/study/getworddataall/${nation}/${alphabet}`)
     .then((res) => {
       if(res.data) {
-        setWords(res.data);
-        setWordsViewList(res.data);
+        let copy: any = [...res.data];
+        copy.sort((a: any, b: any) => (a.word.toLowerCase() > b.word.toLowerCase() ? 1 : -1));
+        setIsResdataFalse(false);
+        setWords(copy);
+        setWordsViewList(copy);
+      } else {
+        setIsResdataFalse(true);
       }
     });
   };
@@ -64,12 +70,8 @@ export default function WordList (props : any) {
 
   const handleNationChange = (selected : any) => {
     if (selected === "이태리") {setNation('Itary');}
-    if (selected === "독일") {
-      Alert.alert('준비중입니다.')
-      // setNation('German');
-    }
+    if (selected === "독일") {setNation('German');}
   };
-
 
   const handleAlphabetChange = (selected : any) => {
     const copy = selected.slice(0,1);
@@ -78,7 +80,7 @@ export default function WordList (props : any) {
 
 
   return (
-    words.length === 0
+    words.length === 0 && !isResdataFalse
     ?  (
     <View style={{flex:1, width:'100%', height:'100%'}}>
       <Loading /> 
@@ -92,38 +94,40 @@ export default function WordList (props : any) {
           
           <View style={{flexDirection:'row', justifyContent:'space-between'}}>
             <View style={styles.selectDropdown}>
-              <Typography fontSize={14} color='#8C8C8C' fontWeightIdx={2}>언어</Typography>
+              <Typography fontSize={14} color='#8C8C8C' >언어</Typography>
               <SelectDropdown
                 data={optionsNation}
                 onSelect={(selectedItem, index) => {
                   handleNationChange(selectedItem);
                 }}
                 defaultButtonText={optionsNation[0]}
-                buttonStyle={{width:110, height:30, backgroundColor:'#fff'}}
-                buttonTextStyle={{fontSize:12, fontWeight:'bold'}}
+                buttonStyle={{width:90, height:30, backgroundColor:'#fff'}}
+                buttonTextStyle={{fontSize:14, fontWeight:'bold'}}
                 dropdownStyle={{width:120, borderRadius:10}}
                 rowStyle={{ width:120}}
-                rowTextStyle={{fontSize:12, fontWeight:'bold'}}
+                rowTextStyle={{fontSize:14, fontWeight:'bold'}}
               />
+              <AntDesign name='down' size={12} color='#8C8C8C'/>
             </View>
           </View>
 
 
           <View style={{marginTop:10, alignItems:'center'}}>
             <View style={[styles.selectDropdown, {width:'100%'}]}>
-              <Typography fontSize={14} color='#8C8C8C' fontWeightIdx={2}>첫문자</Typography>
+              <Typography fontSize={14} color='#8C8C8C' >첫문자</Typography>
               <SelectDropdown
                 data={optionsAlphabet}
                 onSelect={(selectedItem, index) => {
                   handleAlphabetChange(selectedItem);
                 }}
                 defaultButtonText={optionsAlphabet[0]}
-                buttonStyle={{width:270, height:30, backgroundColor:'#fff'}}
-                buttonTextStyle={{fontSize:12, fontWeight:'bold'}}
+                buttonStyle={{width:250, height:30, backgroundColor:'#fff'}}
+                buttonTextStyle={{fontSize:14, fontWeight:'bold'}}
                 dropdownStyle={{width:270, borderRadius:10}}
                 rowStyle={{ width:270}}
-                rowTextStyle={{fontSize:12, fontWeight:'bold'}}
+                rowTextStyle={{fontSize:14, fontWeight:'bold'}}
               />
+              <AntDesign name='down' size={12} color='#8C8C8C'/>
             </View>
           </View>
 
@@ -132,7 +136,6 @@ export default function WordList (props : any) {
             <View style={[styles.flexBox, { alignItems:"center"}]}>
               <Entypo name="magnifying-glass" size={22} color="#8B8B8B" style={{marginRight:13}}/> 
               <TextInput 
-                maxLength={20} 
                 placeholder="단어"
                 placeholderTextColor="#DBDBDB"
                 value={inputValue}
@@ -146,28 +149,8 @@ export default function WordList (props : any) {
           </View>
 
           {
-            wordsViewList.length > 0
+            wordsViewList.length === 0 || isResdataFalse
             ?
-            <>
-              {
-                wordsViewList.map((item:any, index:any)=>{
-
-                  return (
-                    <TouchableOpacity
-                      key={index} 
-                      style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginVertical:10}}
-                      onPress={()=>{
-                        props.navigation.navigate('WordDetail', { setword : item.word, nation : nation })
-                      }}
-                    >
-                      <Typography fontSize={18}>{item.word}</Typography>
-                      <AntDesign name='right'/>
-                    </TouchableOpacity>
-                  )
-                })
-              }
-            </>
-            :
             <View style={{alignItems:'center', justifyContent:'center', paddingTop:20}}>
               <Typography color="#8B8B8B">검색결과가 없습니다.</Typography>
               <TouchableOpacity 
@@ -176,11 +159,38 @@ export default function WordList (props : any) {
                   props.navigation.navigate('Request', {select : 'Word', setword : inputValue})
                 }}
               >
-                <Typography fontSize={12} fontWeightIdx={2} color='#E5625D'>단어 등록 요청</Typography>
+                <Typography fontSize={12}  color='#E5625D'>단어 등록 요청</Typography>
               </TouchableOpacity>
             </View>
+            :
+            <>
+              {
+                wordsViewList.map((item:any, index:any)=>{
+
+                  const reform = (text : any) => {
+                    const indexOfTarget = text.indexOf("'");
+                    const resultString = item.word.slice(0, indexOfTarget) + '\\' + item.word.slice(indexOfTarget);
+                    return resultString;
+                  }
+                  const wordcopy = item.word.includes("'") ? reform(item.word) : item.word
+
+                  return (
+                    <TouchableOpacity
+                      key={index} 
+                      style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginVertical:10}}
+                      onPress={()=>{
+                        props.navigation.navigate('WordDetail', { setword : wordcopy, nation : nation })
+                      }}
+                    >
+                      <Typography fontSize={18} fontWeightIdx={1}>{item.word}</Typography>
+                      <AntDesign name='right'/>
+                    </TouchableOpacity>
+                  )
+                })
+              }
+            </>
           }
-          
+          <View style={{height:150}}></View>
         </ScrollView>
       </View>
 
@@ -223,5 +233,4 @@ const styles = StyleSheet.create({
   },
 
 });
-
 

@@ -59,82 +59,86 @@ export default function Report (props: any) {
     props.navigation.navigate('MyPageMain');
   };
 
+  const [isPartModalVisible, setPartModalVisible] = useState(false);
   const partToggleModal = () => {
     setPartModalVisible(!isPartModalVisible);
   };
-  const [isPartModalVisible, setPartModalVisible] = useState(false);
+  
   const part = ["잘못된 정보", "상업적 광고", "음란물", "폭력성", "기타"]
 
   return (
-    <ScrollView style={styles.container}>
-      <SubTitle title='신고하기' enTitle='Report' navigation={props.navigation}/>
-      <Divider height={2} />
-      <View style={styles.section}>
-      <View style={styles.userBox}>
-        <Typography><Entypo name="pencil" size={20} color="black"/> </Typography>
-        <Typography>{asyncGetData.userName} </Typography>
-        <Typography color='#8C8C8C'>{asyncGetData.userSchool}</Typography>
-        <Typography color='#8C8C8C'>{asyncGetData.userSchNum} </Typography>
-        <Typography color='#8C8C8C'>{asyncGetData.reportPart}</Typography>
-      </View>
-
-      <View style={styles.addPostBox}>
-        <Typography marginBottom={10}>* 신고사유</Typography>
-        <TouchableOpacity
-            onPress={partToggleModal}
-        >
-          <View style={[styles.input, {width: '100%', alignItems:'center'}]}>
-            <Typography>
-              {reportPart === '' ? '신고 사유를 선택해 주세요' : reportPart}
-            </Typography>
-          </View>
-        </TouchableOpacity>
-
-        <Typography marginBottom={10}>* 내용</Typography>
-        <TextInput
-          style={[styles.input, styles.contentInput]}
-          placeholder="내용을 입력해주세요"
-          value={content}
-          onChangeText={setContent}
-          multiline
-        />
-      </View>
-
-      <ButtonBox leftFunction={closeDetail} leftText='취소' rightFunction={createPost} rightText='작성'/>
-      </View>
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={isPartModalVisible}
-        onRequestClose={partToggleModal}
-      >
-        <View style={{ width: '100%', position: 'absolute', bottom:0, borderRadius: 20, backgroundColor: 'white', 
-                      padding: 20, borderTopWidth:1, borderTopColor:'#EAEAEA'}}>
-            <Typography marginBottom={10}>* 사유선택</Typography>
-            <View style={{flexDirection: 'row', justifyContent: 'center', flexWrap:'wrap', }}>
-            {
-              part.map((item, index)=>{
-                return(
-                  <TouchableOpacity 
-                    key={index}   
-                    onPress={()=>{
-                      setReportPart(item);
-                      partToggleModal();
-                    }} 
-                    style={{width: '48%', height: 50, borderWidth:1, borderColor: '#EAEAEA'}}
-                    >
-                      <View style={{width:'100%', height:'100%', alignItems:'center', justifyContent:'center'}}>
-                        <Typography fontWeight='bold' fontSize={14}>{item}</Typography>
-                      </View>
-                  </TouchableOpacity> 
-                )
-              })
-            }
-            </View>
+    <View style={{flex:1}}>
+      <ScrollView style={styles.container}>
+        <SubTitle title='신고하기' enTitle='Report' navigation={props.navigation}/>
+        <Divider height={2} />
+        <View style={styles.section}>
+        <View style={styles.userBox}>
+          <Typography><Entypo name="pencil" size={20} color="black"/> </Typography>
+          <Typography>{asyncGetData.userName} </Typography>
+          <Typography color='#8C8C8C'>{asyncGetData.userSchool}</Typography>
+          <Typography color='#8C8C8C'>{asyncGetData.userSchNum} </Typography>
+          <Typography color='#8C8C8C'>{asyncGetData.reportPart}</Typography>
         </View>
-      </Modal>
-    </ScrollView>
+
+        <View style={styles.addPostBox}>
+          <Typography marginBottom={10}>* 신고사유</Typography>
+          <TouchableOpacity
+              onPress={partToggleModal}
+          >
+            <View style={[styles.input, {width: '100%', alignItems:'center'}]}>
+              <Typography>
+                {reportPart === '' ? '신고 사유를 선택해 주세요' : reportPart}
+              </Typography>
+            </View>
+          </TouchableOpacity>
+
+          <Typography marginBottom={10}>* 내용</Typography>
+          <TextInput
+            style={[styles.input, styles.contentInput]}
+            placeholder="내용을 입력해주세요"
+            value={content}
+            onChangeText={setContent}
+            multiline
+          />
+        </View>
+
+        <ButtonBox leftFunction={closeDetail} leftText='취소' rightFunction={createPost} rightText='작성'/>
+        </View>
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={isPartModalVisible}
+          onRequestClose={partToggleModal}
+        >
+          <View style={{ width: '100%', position: 'absolute', bottom:0, borderRadius: 20, backgroundColor: 'white', 
+                        padding: 20, borderTopWidth:1, borderTopColor:'#EAEAEA'}}>
+              <Typography marginBottom={10}>* 사유선택</Typography>
+              <View style={{flexDirection: 'row', justifyContent: 'center', flexWrap:'wrap', }}>
+              {
+                part.map((item, index)=>{
+                  return(
+                    <TouchableOpacity 
+                      key={index}   
+                      onPress={()=>{
+                        setReportPart(item);
+                        partToggleModal();
+                      }} 
+                      style={{width: '48%', height: 50, borderWidth:1, borderColor: '#EAEAEA'}}
+                      >
+                        <View style={{width:'100%', height:'100%', alignItems:'center', justifyContent:'center'}}>
+                          <Typography fontSize={14}>{item}</Typography>
+                        </View>
+                    </TouchableOpacity> 
+                  )
+                })
+              }
+              </View>
+          </View>
+        </Modal>
+      </ScrollView>
+      <View style={ isPartModalVisible ? styles.modalBackCover :  { display: 'none'}}></View>
+    </View>
   );
 }
 
@@ -186,7 +190,13 @@ const styles = StyleSheet.create({
     minHeight: 200,
     textAlignVertical: 'top',
   },
-
+  modalBackCover : {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#333',
+    opacity: 0.8
+  },
 
 });
 

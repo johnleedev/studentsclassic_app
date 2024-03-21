@@ -19,7 +19,7 @@ export const ButtonBox :React.FC<{
         <TouchableOpacity 
           style={[styles.Button, {borderColor: '#8C8C8C'}]} 
           onPress={props.leftFunction}>
-          <Typography color='#8C8C8C'>{props.leftText}</Typography>
+          <Typography color='#8C8C8C' fontWeightIdx={1}>{props.leftText}</Typography>
         </TouchableOpacity>
       </View>
 
@@ -27,7 +27,7 @@ export const ButtonBox :React.FC<{
         <TouchableOpacity 
           style={[styles.Button, {borderColor: '#333'}]} 
           onPress={props.rightFunction}>
-          <Typography>{props.rightText}</Typography>
+          <Typography fontWeightIdx={1}>{props.rightText}</Typography>
         </TouchableOpacity>
       </View>
 

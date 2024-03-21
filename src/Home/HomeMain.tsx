@@ -17,6 +17,9 @@ import messaging from '@react-native-firebase/messaging';
 import Toast from 'react-native-toast-message';
 import { Divider } from '../Components/Divider';
 import Clipboard from '@react-native-clipboard/clipboard';
+import RequestBoard from './RequestBoard';
+import { useRecoilState } from 'recoil';
+import { recoilIsViewedMainModal } from '../RecoilStore';
 
 function HomeMain(props : any) {
 
@@ -37,6 +40,8 @@ function HomeMain(props : any) {
   // 게시판 최신 글 가져오기
   const [posts, setposts] = useState<any>([]);
   const [advs, setAdvs] = useState<any>([]);
+  const [mainModal, setMainModal] = useState<any>();
+  const [isViewedMainModal, setIsViewedMainModal] = useRecoilState(recoilIsViewedMainModal);
   const fetchPosts = () => {
     axios.get(`${MainURL}/board/posts/get`).then((res) => {
       let copy: any = [...res.data];
@@ -45,8 +50,13 @@ function HomeMain(props : any) {
     });
     axios.get(`${MainURL}/home/getadvertise`).then((res) => {
       let copy: any = [...res.data];
-      copy.reverse();
-      setAdvs(copy);
+      const mainModalCopy = copy.filter((item:any)=> item.imageName === 'mainModal');
+      if (mainModalCopy[0].url !== "") {
+        setMainModal(mainModalCopy[0]);
+      }
+      const advResult = copy.filter((item:any)=> item.imageName !== 'mainModal');
+      advResult.reverse();
+      setAdvs(advResult);
     });
    };
   
@@ -75,7 +85,7 @@ function HomeMain(props : any) {
         }
       })
     } else if (check.status === 'granted') {
-      props.navigation.navigate("Navi_Home", {screen:"Notification", params: { userAccount: asyncGetData.userAccount }});
+      props.navigation.navigate("Navi_Notifi", {screen:"Notification", params: { userAccount: asyncGetData.userAccount }});
     } else {
       return
     }
@@ -116,10 +126,32 @@ function HomeMain(props : any) {
     return unsubscribe
   }, []);
 
-
+  
   return (
     <View style={styles.container}>
-      
+
+      {
+        mainModal !== undefined && !isViewedMainModal &&
+        <>
+          <View style={{position:'absolute', top:0, width:'100%', height:'100%',
+                        alignItems:'center', justifyContent:'center', zIndex:8}}>
+            <View style={{width:'100%', backgroundColor:'#fff', padding:20, zIndex:9}}>
+              <View style={{borderWidth:1, width:'100%', alignItems:'center', padding:20, borderRadius:10}}>
+                <Typography fontSize={20} fontWeightIdx={0} marginBottom={20}>NOTICE</Typography>
+                <Typography>{mainModal?.url}</Typography>
+              </View>            
+              <TouchableOpacity 
+                style={{marginTop:10, alignItems:'flex-end', paddingHorizontal:10}}
+                onPress={()=>{setIsViewedMainModal(true)}}
+              >
+                <Typography>닫기 X</Typography>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{position:'absolute', width:'100%', height:'100%', backgroundColor:'#333', opacity:0.5, zIndex:7}}></View>
+        </>
+      }
+
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 10 : 100}
@@ -149,10 +181,10 @@ function HomeMain(props : any) {
               </TouchableOpacity>
             </View>  
             <View>
-              <Typography color='#fff' fontSize={20} marginBottom={5}>음악대학에 재학중인</Typography>
-              <Typography color='#fff' fontSize={20} marginBottom={10}>성악전공 대학생들의 커뮤니티 플랫폼</Typography>
-              <Typography color='#fff' fontSize={12} marginBottom={5}>음대생들의 소통과 교류를 통해</Typography>
-              <Typography color='#fff' fontSize={12} marginBottom={5}>특별한 음악적 경험을 확장해보세요</Typography>
+              <Typography color='#fff' fontSize={20} marginBottom={5} fontWeightIdx={0}>성악과 학생들의 </Typography>
+              <Typography color='#fff' fontSize={20} marginBottom={10} fontWeightIdx={0}>커뮤니티 플랫폼</Typography>
+              <Typography color='#fff' fontSize={12} marginBottom={5} fontWeightIdx={0}>"성악과학생들"은</Typography>
+              <Typography color='#fff' fontSize={12} marginBottom={5} fontWeightIdx={0}>모든 성악도 학생들을 응원합니다.</Typography>
             </View>
           </View>
         </View>
@@ -199,7 +231,7 @@ function HomeMain(props : any) {
               >
                 <View style={{padding:10, width:"100%",height:"100%"}}>
                   <View style={{backgroundColor:'#fff', width:'100%', padding:10, borderRadius:5}}>
-                    <Typography marginBottom={10}>성악전공 학생들을 위한 특별한 서비스</Typography>  
+                    <Typography marginBottom={10} fontWeightIdx={1}>성악과 학생들을 위한 특별한 서비스</Typography>  
                     <Typography fontSize={14} fontWeightIdx={1} marginBottom={3}>새로운 곡의 가사를 해석할때</Typography>
                     <Typography fontSize={14} fontWeightIdx={1} marginBottom={3}>이전의 불편한 방식은 이제 그만!</Typography>
                     <Typography fontSize={14} fontWeightIdx={1}>쉽고 편하게 단어 뜻을 찾을수 있어요.</Typography>
@@ -217,7 +249,6 @@ function HomeMain(props : any) {
 
         <Divider height={5} />
 
-     
         <Title title='최신글' enTitle='Community'/>
         <View style={styles.section}>
           {/* 자유게시판 */}
@@ -233,11 +264,11 @@ function HomeMain(props : any) {
                     <View 
                       style={{borderWidth:1, borderColor:'#EAEAEA', borderRadius:10, padding:10, marginBottom:10}}
                     >
-                      <Typography marginBottom={10}>{item.title}</Typography>
+                      <Typography marginBottom={10} fontWeightIdx={1}>{item.title}</Typography>
                       <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <Typography fontSize={14}><Ionicons name="eye-outline" size={14} color="black" /> {item.views} </Typography>
-                        <Typography fontSize={14}><Feather name="thumbs-up" size={14} color="black" /> {item.isLiked} </Typography>
-                        <Typography fontSize={14}><Ionicons name="chatbubble-ellipses-outline" size={14} color="black" /> {item.commentCount ? item.commentCount : '0' } </Typography>
+                        <Typography fontSize={14} ><Ionicons name="eye-outline" size={14} color="black" /> {item.views} </Typography>
+                        <Typography fontSize={14} ><Feather name="thumbs-up" size={14} color="black" /> {item.isLiked} </Typography>
+                        <Typography fontSize={14} ><Ionicons name="chatbubble-ellipses-outline" size={14} color="black" /> {item.commentCount ? item.commentCount : '0' } </Typography>
                       </View>
                     </View>
                   </TouchableOpacity>
@@ -245,6 +276,9 @@ function HomeMain(props : any) {
               })
             }
         </View>
+        
+        {/* 곡 등록 요청 목록 */}
+        <RequestBoard navigation={props.navigation}/>
 
         {/* 건의하기 게시판 */}
         <SuggestionBoard/>
@@ -254,6 +288,8 @@ function HomeMain(props : any) {
       </ScrollView>
       </KeyboardAvoidingView>
      
+           
+
     </View> 
    );
 }

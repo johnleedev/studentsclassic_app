@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert, ScrollView, Modal, Linking, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, ScrollView, Modal, TextInput } from 'react-native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -9,32 +9,36 @@ import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AsyncGetItem from '../AsyncGetItem'
 import { Typography } from '../Components/Typography';
-import { Title } from '../Components/Title';
 import { Divider } from '../Components/Divider';
 import axios from 'axios';
 import MainURL from "../../MainURL";
-import WebView from 'react-native-webview';
 import MainVersion from '../../MainVersion';
+import { Title } from '../Components/Title';
+import { ButtonBox } from '../Components/ButtonBox';
 
 function MyPageMain (props: any) {
 
-  const [getProfile, setGetProfile] = useState<any>([]);
-  const [contactNum, setContactNum] = useState<string>('');
-  const [carrerInputs, setCarrerInputs] = useState<any>({});
-  const [videoLinks, setVideoLinks] = useState<any>({});
-  const [imageNames, setImageNames] = useState<any>({});
+
+  const [isProfileModalVisible, setProfileModalVisible] = useState(false);
+  const profileToggleModal = () => {
+    setProfileModalVisible(!isProfileModalVisible);
+  };
+
   const [asyncGetData, setAsyncGetData] = useState<any>({});
   const [refresh, setRefresh] = useState<boolean>(true);
+  const [userName, setUserName] = useState('');
+  const [userSchool, setUserSchool] = useState('');
+  const [userSchNum, setUserSchNum] = useState('');
+  const [userPart, setUserPart] = useState('');
 
   const asyncFetchData = async () => {
     try {
       const data = await AsyncGetItem();
       axios.get(`${MainURL}/mypage/getprofile/${data?.userAccount}`).then((res) => {
-        setContactNum(res.data.contactNum);
-        setCarrerInputs(res.data.carrerInputs);
-        setVideoLinks(res.data.videoLinks);
-        setImageNames(res.data.imageNames);
-        setGetProfile(res.data);
+       setUserName(res.data[0].userName);
+       setUserSchool(res.data[0].userSchool);
+       setUserSchNum(res.data[0].userSchNum);
+       setUserPart(res.data[0].userPart);
       });
       setAsyncGetData(data);
     } catch (error) {
@@ -44,7 +48,31 @@ function MyPageMain (props: any) {
 
   useEffect(() => {
     asyncFetchData();
-  }, [refresh]);
+  }, [isProfileModalVisible, refresh]);
+
+  const changeProfile = async () => {
+    axios
+      .post(`${MainURL}/mypage/changeprofile`, {
+        userAccount : asyncGetData.userAccount,
+        userName: userName, userSchool: userSchool, 
+        userSchNum : userSchNum, userPart : userPart
+      })
+      .then((res) => {
+        if (res.data === true) {
+          AsyncStorage.setItem('name', userName);
+          AsyncStorage.setItem('school', userSchool);
+          AsyncStorage.setItem('schNum', userSchNum);
+          AsyncStorage.setItem('part', userPart);
+          Alert.alert('입력되었습니다.');
+          profileToggleModal();
+        } else {
+          Alert.alert(res.data)
+        }
+      })
+      .catch(() => {
+        console.log('실패함')
+      })
+  };
  
   const handleLogout = () => {
     AsyncStorage.removeItem('token');
@@ -63,6 +91,7 @@ function MyPageMain (props: any) {
   };
   
 
+
   return (
     <View style={{flex:1, backgroundColor:'#fff'}}>
 
@@ -73,26 +102,90 @@ function MyPageMain (props: any) {
       <ScrollView style={styles.container}>
       
       <View style={styles.section}>
-        <Typography fontSize={24}>기본 정보</Typography>
+        <Typography fontSize={18} fontWeightIdx={1}>기본 정보</Typography>
+        <TouchableOpacity style={{position:'absolute', top:10, right:10, padding:15}}
+         onPress={profileToggleModal}
+        >
+          <AntDesign name='setting' size={20} color='#000'/>
+        </TouchableOpacity>
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={isProfileModalVisible}
+          onRequestClose={profileToggleModal}
+        >
+          <View style={{ width: '100%', position: 'absolute', top:80, borderRadius: 20, backgroundColor: 'white', 
+                        padding: 20}}>
+            <Typography marginBottom={10} fontWeightIdx={1}>프로필 편집</Typography>
+            <TouchableOpacity style={{position:'absolute', top:5, right:10, padding:15}}
+              onPress={profileToggleModal}
+              > 
+                <AntDesign name='close' size={20} color='#000'/>
+            </TouchableOpacity>
+            <Divider height={3} marginVertical={10}/>
+            
+              <View style={styles.infoBox}>
+                <Typography>이름: </Typography>
+                <TextInput
+                  style={styles.input}
+                  placeholder="이름"
+                  value={userName}
+                  onChangeText={setUserName}
+                /> 
+              </View>
+              <View style={styles.infoBox}>
+                <Typography>학교: </Typography>
+                <TextInput
+                  style={styles.input}
+                  placeholder="학교"
+                  value={userSchool}
+                  onChangeText={setUserSchool}
+                /> 
+              </View>
+              <View style={styles.infoBox}>
+                <Typography>학번: </Typography>
+                <TextInput
+                  style={styles.input}
+                  placeholder="이름"
+                  value={userSchNum}
+                  onChangeText={setUserSchNum}
+                /> 
+              </View>
+              <View style={styles.infoBox}>
+                <Typography>파트: </Typography>
+                <TextInput
+                  style={styles.input}
+                  placeholder="이름"
+                  value={userPart}
+                  onChangeText={setUserPart}
+                /> 
+              </View>
+              <View style={{height:100, justifyContent:'flex-end'}}>
+                <ButtonBox leftText='취소' leftFunction={profileToggleModal} rightText='변경' rightFunction={changeProfile} />
+              </View>
+          </View>
+        </Modal>
+
         <View style={styles.infoBox}>
           <View style={styles.infoTextBox}>
-            <Typography marginBottom={10} fontWeightIdx={2}>
-              <Entypo name="beamed-note" size={16} color="black"/> 계정: {asyncGetData.userAccount}
+            <Typography marginBottom={10} >
+              <Entypo name="beamed-note" size={16} color="#000"/> 계정: {asyncGetData.userAccount}
             </Typography>
-            <Typography marginBottom={10} fontWeightIdx={2}>
-              <Entypo name="beamed-note" size={16} color="black"/> 이름: {asyncGetData.userName}
+            <Typography marginBottom={10} >
+              <Entypo name="beamed-note" size={16} color="#000"/> 이름: {asyncGetData.userName}
             </Typography>
-            <Typography marginBottom={10} fontWeightIdx={2}>
-              <Entypo name="beamed-note" size={16} color="black"/> 학교: {asyncGetData.userSchool}
+            <Typography marginBottom={10} >
+              <Entypo name="beamed-note" size={16} color="#000"/> 학교: {asyncGetData.userSchool}
             </Typography>
-            <Typography marginBottom={10} fontWeightIdx={2}>
-              <Entypo name="beamed-note" size={16} color="black"/> 학번: {asyncGetData.userSchNum}
+            <Typography marginBottom={10} >
+              <Entypo name="beamed-note" size={16} color="#000"/> 학번: {asyncGetData.userSchNum}
             </Typography>
-            <Typography marginBottom={10} fontWeightIdx={2}>
-              <Entypo name="beamed-note" size={16} color="black"/> 파트: {asyncGetData.userPart}
+            <Typography marginBottom={10} >
+              <Entypo name="beamed-note" size={16} color="#000"/> 파트: {asyncGetData.userPart}
             </Typography>
-            <Typography marginBottom={10} fontWeightIdx={2}>
-              <Entypo name="beamed-note" size={16} color="black"/> 로그인 방식: {asyncGetData.userURL}
+            <Typography marginBottom={10} >
+              <Entypo name="beamed-note" size={16} color="#000"/> 로그인 방식: {asyncGetData.userURL}
             </Typography>
           </View>
         </View>
@@ -102,68 +195,68 @@ function MyPageMain (props: any) {
       <Divider height={2}/>
 
       <View style={styles.section}>
-        <Typography fontSize={24} marginBottom={10}>기타</Typography>
+        <Typography fontSize={18} marginBottom={10} fontWeightIdx={1}>기타</Typography>
         <TouchableOpacity style={styles.bottomButton} onPress={()=>{
-           props.navigation.navigate("Notice");
+            props.navigation.navigate('Navi_Notifi', {screen: 'Notice'});
         }}>
-          <Feather name="clipboard" size={20} color="black" style={{marginRight:15}}/>
+          <Feather name="clipboard" size={20} color="#000" style={{marginRight:15}}/>
           <View style={styles.bottomButtonRow}>
-            <Typography color='#555' fontWeightIdx={2}>공지사항</Typography>
-            <AntDesign name="right" size={15} color="black" />
+            <Typography color='#555' >공지사항</Typography>
+            <AntDesign name="right" size={15} color="#000" />
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.bottomButton} onPress={()=>{
            props.navigation.navigate("Question");
         }}>
-          <AntDesign name="questioncircleo" size={20} color="black" style={{marginRight:15}}/>
+          <AntDesign name="questioncircleo" size={20} color="#000" style={{marginRight:15}}/>
           <View style={styles.bottomButtonRow}>
-            <Typography color='#555' fontWeightIdx={2}>문의하기</Typography>
-            <AntDesign name="right" size={15} color="black" />
+            <Typography color='#555' >문의하기</Typography>
+            <AntDesign name="right" size={15} color="#000" />
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.bottomButton} onPress={()=>{
            props.navigation.navigate("Report");
         }}>
-          <MaterialCommunityIcons name="bullhorn-variant-outline" size={20} color="black" style={{marginRight:15}}/>
+          <MaterialCommunityIcons name="bullhorn-variant-outline" size={20} color="#000" style={{marginRight:15}}/>
           <View style={styles.bottomButtonRow}>
-            <Typography color='#555' fontWeightIdx={2}>신고하기</Typography>
-            <AntDesign name="right" size={15} color="black" />
+            <Typography color='#555' >신고하기</Typography>
+            <AntDesign name="right" size={15} color="#000" />
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.bottomButton} onPress={()=>{
            props.navigation.navigate("Advertising");
         }}>
-          <MaterialCommunityIcons name="advertisements" size={20} color="black" style={{marginRight:13}}/>
+          <MaterialCommunityIcons name="advertisements" size={20} color="#000" style={{marginRight:13}}/>
           <View style={styles.bottomButtonRow}>
-            <Typography color='#555' fontWeightIdx={2}>광고 및 제휴</Typography>
-            <AntDesign name="right" size={15} color="black" />
+            <Typography color='#555' >광고 및 제휴</Typography>
+            <AntDesign name="right" size={15} color="#000" />
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.bottomButton} onPress={()=>{
           props.navigation.navigate("Policy");
         }}>
-          <MaterialIcons name="policy" size={20} color="black" style={{marginRight:13}}/>
+          <MaterialIcons name="policy" size={20} color="#000" style={{marginRight:13}}/>
           <View style={styles.bottomButtonRow}>
-            <Typography color='#555' fontWeightIdx={2}>약관 및 정책</Typography>
-            <AntDesign name="right" size={15} color="black" />
+            <Typography color='#555' >약관 및 정책</Typography>
+            <AntDesign name="right" size={15} color="#000" />
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.bottomButton} onPress={()=>{
           props.navigation.navigate("PersonInfo");
         }}>
-          <Entypo name="info" size={20} color="black" style={{marginRight:12}}/>
+          <Entypo name="info" size={20} color="#000" style={{marginRight:12}}/>
           <View style={styles.bottomButtonRow}>
-            <Typography color='#555' fontWeightIdx={2}>개인정보처리방침</Typography>
-            <AntDesign name="right" size={15} color="black" />
+            <Typography color='#555' >개인정보처리방침</Typography>
+            <AntDesign name="right" size={15} color="#000" />
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.bottomButton} onPress={()=>{
           props.navigation.navigate("BusinessInfo");
         }}>
-          <FontAwesome name="building-o" size={20} color="black" style={{marginRight:15}}/>
+          <FontAwesome name="building-o" size={20} color="#000" style={{marginRight:15}}/>
           <View style={styles.bottomButtonRow}>
-            <Typography color='#555' fontWeightIdx={2}>사업자정보</Typography>
-            <AntDesign name="right" size={15} color="black" />
+            <Typography color='#555' >사업자정보</Typography>
+            <AntDesign name="right" size={15} color="#000" />
           </View>
         </TouchableOpacity>
       </View>
@@ -196,6 +289,7 @@ function MyPageMain (props: any) {
 
     </ScrollView>
    
+    <View style={ isProfileModalVisible ? styles.modalBackCover :  { display: 'none'}}></View>
     </View>
   )
 };
@@ -288,6 +382,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#333',
     opacity: 0.8
   },
+  inputBox : {
+    flexDirection:'row', 
+    alignItems:'center', 
+    height:60
+  },
+  input: {
+    width:'85%',
+    height: 40,
+    borderWidth: 1,
+    borderColor: '#dddddd',
+    borderRadius: 4,
+    padding: 8,
+    fontSize: 16,
+    color: '#333',
+  }
 });
 
 export default MyPageMain;

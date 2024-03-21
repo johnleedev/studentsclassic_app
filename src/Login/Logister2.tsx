@@ -9,22 +9,27 @@ import AsyncSetItem from '../AsyncSetItem'
 import { Typography } from '../Components/Typography';
 import { Divider } from '../Components/Divider';
 
+
+
+
+
 function Logister2 (props : any) {
 
+  const [isSchoolModalVisible, setSchoolModalVisible] = useState(false);
   const schoolToggleModal = () => {
     setSchoolModalVisible(!isSchoolModalVisible);
   };
-  const [isSchoolModalVisible, setSchoolModalVisible] = useState(false);
 
+  const [isSchNumModalVisible, setSchNumModalVisible] = useState(false);
   const schNumToggleModal = () => {
     setSchNumModalVisible(!isSchNumModalVisible);
   };
-  const [isSchNumModalVisible, setSchNumModalVisible] = useState(false);
-
+  
+  const [isPartModalVisible, setPartModalVisible] = useState(false);
   const partToggleModal = () => {
     setPartModalVisible(!isPartModalVisible);
   };
-  const [isPartModalVisible, setPartModalVisible] = useState(false);
+
 
   const routeDataSet = () => {
     if(props.route.params === null || props.route.params === undefined) {
@@ -54,10 +59,15 @@ function Logister2 (props : any) {
   const [userPart, setUserPart] = useState('');
   const [userURL, setUserURL] = useState('');
   
-  const schools = ["가천대", "경북대", "경희대", "계명대", "국민대", 
-    "군산대", "단국대", "대구가톨릭대", "목원대", "서울대", "서울사이버대", 
-    "성신여대", "수원대", "숙명여대", "연세대", "영남대", "이화여대", "장신대", "전북대", "전주대", 
-    "제주대", "중앙대", "추계예대", "한세대", "한양대", "한예종", "일반대", "고등학교"]
+  const highschools = ["강원예고", "경기예고", "경남예고", "경북예고", "계원예고", "고양예고", "광주예고", "김천예고", 
+                        "대전예고", "덕원예고", "부산예고", "브니엘예고", "서울예고", "선화예고", "세종예고", "안양예고",
+                        "울산예고", "인천예고", "전남예고", "전주예고", "충남예고", "충북예고", "포항예고" ]
+
+  const univercitys = ["가천대", "경북대", "경희대", "계명대", "국민대", "군산대", "단국대", "대구가톨릭대", "목원대", 
+                      "서울대", "서울사이버대", "성신여대", "수원대", "숙명여대", "연세대", "영남대", "이화여대", "장신대",
+                      "전북대", "전주대", "제주대", "중앙대", "추계예대", "충남대", "한세대", "한양대", "한예종"]
+
+  const publicSchool = ["일반고", "일반대"]
 
   const sch_num = ["25", "24", "23", "22", "21", "20", "19", "18", "17", "16", "15", "14", "13", 
           "12", "11", "10", "09", "08", "07", "06", "05", "04", "03", "02", "01", "00", "99+", "청소년"]
@@ -94,7 +104,7 @@ function Logister2 (props : any) {
   };
 
   const alertSignup = () => { 
-    Alert.alert('중요 공지', '성악하는대학생들은, 효율적인 어플 운영을 위해 회원님들의 정확한 프로필을 필요로 합니다. 가입된 정보가 사실과 다를 경우, 어플 사용에 제한이 있을 수 있습니다.', [
+    Alert.alert('중요 공지', '성악과학생들은, 효율적인 어플 운영을 위해 회원님들의 정확한 프로필을 필요로 합니다. 가입된 정보가 사실과 다를 경우, 어플 사용에 제한이 있을 수 있습니다.', [
       { text: '가입 취소', onPress: () => { return }},
       { text: '확인', onPress: () => handleSignup() }
     ]);
@@ -122,6 +132,56 @@ function Logister2 (props : any) {
     ? alertSignup() 
     : Alert.alert('모든 항목을 선택해주세요')
   };
+
+  // 학교선택 모달창 ------------------------------------------------------------------------
+  const [currentTab, setCurrentTab] = useState(1);
+
+  interface SelectMenuProps {
+    tabNum : number;
+    title: string;
+  }
+  const SelectMenu: React.FC<SelectMenuProps> = ({ tabNum, title}) => {
+    return (
+      <TouchableOpacity
+       style={{width:70, alignItems:'center', paddingTop:10}}
+       onPress={() => setCurrentTab(tabNum)}
+     >
+       <Typography fontWeightIdx={1} fontSize={14} color={currentTab === tabNum ? '#333' : '#8B8B8B'}>{title}</Typography>
+       {
+         currentTab === tabNum
+         ? <View style={{width:60, height:2, backgroundColor:'#333', marginTop:10}}></View>
+         : <View style={{width:60, height:2, backgroundColor:'#fff', marginTop:10}}></View>
+       }
+     </TouchableOpacity>
+    )    
+  };
+
+  interface SchoolBoxProps {
+    item : string[];
+  }
+
+  const SchoolsBox : React.FC<SchoolBoxProps> = ({item}) => (
+    <View style={{flexDirection: 'row', justifyContent: 'center', flexWrap:'wrap', marginBottom:20}}>
+      {
+        item.map((item:any, index:any)=>{
+          return(
+            <TouchableOpacity 
+              key={index} 
+              onPress={()=>{
+                setUserSchool(item);
+                schoolToggleModal();
+              }} 
+              style={{width: '32%', height: 50, borderWidth:1, borderColor: '#EAEAEA'}}
+              >
+                <View style={{width:'100%', height:'100%', alignItems:'center', justifyContent:'center',backgroundColor: '#fff'}}>
+                  <Typography color='#000' fontSize={13}>{item}</Typography>
+                </View>
+            </TouchableOpacity> 
+          )
+        })
+      }
+    </View>
+  )
 
   return (
     <View style={Platform.OS === 'android' ? styles.android : styles.ios}>
@@ -179,7 +239,7 @@ function Logister2 (props : any) {
               <View style={{flexDirection:'row', width: '90%', alignItems:'center'}}>
                 <Typography color='#8C8C8C' fontWeightIdx={1}>학교 <Typography color='#E94A4A'>*</Typography></Typography>
                 <View style={[styles.input, {width: '88%'}]}>
-                  <Typography fontSize={14} color='#333' fontWeightIdx={1}>
+                  <Typography fontSize={14} color='#333'>
                     {userSchool === '' ? '재학 중인 학교를 선택해 주세요' : userSchool}
                   </Typography>
                 </View>
@@ -192,32 +252,25 @@ function Logister2 (props : any) {
               visible={isSchoolModalVisible}
               onRequestClose={schoolToggleModal}
             >
-              <View style={{ width: '100%', position: 'absolute', bottom:0, borderRadius: 20, backgroundColor: 'white', 
+              <View style={{ width: '100%', height:'80%', position: 'absolute', bottom:0, borderRadius: 20, backgroundColor: 'white', 
                             padding: 20}}>
-                  <Typography marginBottom={10}>학교선택</Typography>
-                  <View style={{flexDirection: 'row', justifyContent: 'center', flexWrap:'wrap', }}>
-                  {
-                    schools.map((item, index)=>{
-                      return(
-                        <TouchableOpacity 
-                          key={index} 
-                          onPress={()=>{
-                            setUserSchool(item);
-                            schoolToggleModal();
-                          }} 
-                          style={{width: '32%', height: 50, borderWidth:1, borderColor: '#EAEAEA'}}
-                          >
-                            <View style={{width:'100%', height:'100%', alignItems:'center', justifyContent:'center',
-                                backgroundColor: (item === '고등학교' || item === '일반대') ? '#EAEAEA' : '#fff'
-                              }}>
-                              <Typography fontWeightIdx={1} color='#333' fontSize={13}>{item}</Typography>
-                            </View>
-                        </TouchableOpacity> 
-                      )
-                    })
-                  }
-                  </View>
-                  
+
+                
+                <Typography marginBottom={10} fontWeightIdx={1}>학교선택</Typography>
+                <Divider height={3} marginVertical={5}/>
+
+                
+                <View style={{width:'100%', flexDirection: 'row', alignItems: 'flex-start', paddingLeft:10,
+                      borderBottomWidth:1, borderBottomColor:"#EFEFEF", marginBottom:20}}>
+                  <SelectMenu tabNum={1} title='음악대학'/>
+                  <SelectMenu tabNum={2} title='예술고'/>
+                  <SelectMenu tabNum={3} title='일반'/>
+                </View>
+                <ScrollView>
+                { currentTab === 1 && <SchoolsBox item={univercitys}/> } 
+                { currentTab === 2 && <SchoolsBox item={highschools}/> } 
+                { currentTab === 3 && <SchoolsBox item={publicSchool}/> } 
+                </ScrollView>             
               </View>
             </Modal>
 
@@ -229,7 +282,7 @@ function Logister2 (props : any) {
               <View style={{flexDirection:'row', width: '90%', alignItems:'center'}}>
                 <Typography color='#8C8C8C' fontWeightIdx={1}>학번 <Typography color='#E94A4A'>*</Typography></Typography>
                 <View style={[styles.input, {width: '88%'}]}>
-                  <Typography fontSize={14} color='#333' fontWeightIdx={1}>
+                  <Typography fontSize={14} color='#333'>
                     {userSchNum === '' ? '학번을 선택해 주세요' : userSchNum}
                   </Typography>
                 </View>
@@ -244,7 +297,7 @@ function Logister2 (props : any) {
             >
               <View style={{ width: '100%', position: 'absolute', bottom:0, borderRadius: 20, backgroundColor: 'white', 
                             padding: 20}}>
-                  <Typography marginBottom={10}>학번선택</Typography>
+                  <Typography marginBottom={10} fontWeightIdx={1}>학번선택</Typography>
                   <View style={{flexDirection: 'row', justifyContent: 'center', flexWrap:'wrap', }}>
                   {
                     sch_num.map((item, index)=>{
@@ -259,7 +312,7 @@ function Logister2 (props : any) {
                           >
                             <View style={{width:'100%', height:'100%', alignItems:'center', justifyContent:'center',
                               backgroundColor: item === '청소년' ? '#EAEAEA' : '#fff'}}>
-                              <Typography color='#333' fontSize={13} fontWeightIdx={1}>{item}</Typography>
+                              <Typography color='#000' fontSize={13}>{item}</Typography>
                             </View>
                         </TouchableOpacity> 
                       )
@@ -277,7 +330,7 @@ function Logister2 (props : any) {
               <View style={{flexDirection:'row', width: '90%', alignItems:'center', marginBottom:10}}>
                 <Typography color='#8C8C8C' fontWeightIdx={1}>파트 <Typography color='#E94A4A'>*</Typography></Typography>
                 <View style={[styles.input, {width: '88%'}]}>
-                  <Typography fontSize={14} color='#333' fontWeightIdx={1}>
+                  <Typography fontSize={14} color='#333'>
                     {userPart === '' ? '파트를 선택해 주세요' : userPart}
                   </Typography>
                 </View>
@@ -292,7 +345,7 @@ function Logister2 (props : any) {
             >
               <View style={{ width: '100%', position: 'absolute', bottom:0, borderRadius: 20, backgroundColor: 'white', 
                             padding: 20}}>
-                  <Typography marginBottom={10}>파트선택</Typography>
+                  <Typography marginBottom={10} fontWeightIdx={1}>파트선택</Typography>
                   <View style={{flexDirection: 'row', justifyContent: 'center', flexWrap:'wrap', }}>
                   {
                     part.map((item, index)=>{
@@ -307,7 +360,7 @@ function Logister2 (props : any) {
                           >
                             <View style={{width:'100%', height:'100%', alignItems:'center', justifyContent:'center',
                                       backgroundColor: item === '비전공' ? '#EAEAEA' : '#fff'}}>
-                              <Typography  color='#333' fontSize={13} fontWeightIdx={1}>{item}</Typography>
+                              <Typography  color='#333' fontSize={13}>{item}</Typography>
                             </View>
                         </TouchableOpacity> 
                       )
@@ -350,6 +403,8 @@ function Logister2 (props : any) {
     </View>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   android: {

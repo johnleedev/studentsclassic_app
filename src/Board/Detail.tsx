@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert, ScrollView, Modal, 
-          Platform, TextInput, KeyboardAvoidingView, RefreshControl } from 'react-native';
+          Platform, TextInput, KeyboardAvoidingView, Image } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import MainURL from "../../MainURL";
@@ -14,7 +14,7 @@ import { Divider } from '../Components/Divider';
 import AsyncGetItem from '../AsyncGetItem';
 import CommentOption from './CommentOption';
 import DateFormmating from '../Components/DateFormmating';
-
+import MainImageURL from "../../MainImageURL";
 
 function Detail (props: any) {
 
@@ -27,13 +27,6 @@ function Detail (props: any) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [commentText, setCommentText] = useState('');
   const [refresh, setRefresh] = useState<boolean>(false);
-
-  const onRefresh = React.useCallback(() => {
-    setRefresh(true);
-    setTimeout(() => {
-      setRefresh(false);
-    }, 500);
-  }, []);
 
   const asyncFetchData = async () => {
     try {
@@ -111,8 +104,7 @@ function Detail (props: any) {
           Alert.alert('삭제 되었습니다.');
           props.navigation.replace('Main');
         } else if (res.data === false) {
-          Alert.alert('다시 시도해주십시오');
-          props.navigation.replace('Main');
+          Alert.alert('다시 시도해주세요');
         }
       });
   };
@@ -181,35 +173,33 @@ function Detail (props: any) {
   const firstCharacter = route.params.data?.userName.charAt(0);
   const restOfTheString = 'O'.repeat(route.params.data?.userName.length - 1);
   const modifiedName = firstCharacter + restOfTheString;
+  const images = route.params.data?.images ? JSON.parse(route.params.data?.images) : [];
 
   return (
-    <View style={{flex:1}}>
+    <View style={styles.container}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 20 : 100}
         style={{flex:1}}
       >
-      <ScrollView 
-        style={styles.container}
-        refreshControl={
-          <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
-        }
-      >
-        
-        <View style={styles.section}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={()=>{
-              props.navigation.goBack()
-            }}>
-            <EvilIcons name="arrow-left" size={30} color="black" />
-          </TouchableOpacity>
-        </View>
+      
+      <View style={{padding:15}}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={()=>{
+            props.navigation.goBack()
+          }}>
+          <AntDesign name="left" size={20} color="black" />
+        </TouchableOpacity>
+      </View>
+      
+      <Divider/>
+
+      <ScrollView  style={styles.container}>
 
         <View style={styles.section}>
-          <Typography fontSize={14} marginBottom={10} color='#D76F23'>자유게시판</Typography>
-          <View style={{flex: 1, flexDirection: 'row'}}>
-            <Typography fontSize={20} marginBottom={10}>{route.params.data?.title}</Typography>
+          <View style={{flexDirection: 'row', justifyContent:'space-between', alignItems:'center', marginBottom:15}}>
+            <Typography fontSize={14} color='#D76F23'>자유게시판</Typography>  
             {isUser ? 
             <TouchableOpacity 
               onPress={() => setIsModalVisible(true)}
@@ -218,42 +208,45 @@ function Detail (props: any) {
             </TouchableOpacity>
             : null}
           </View>
-          <View style={[styles.titleContainer, {justifyContent:'space-between'}]}>
-            <Typography color='gray' fontSize={13}>{DateFormmating(route.params.data?.date)}</Typography>
+          <Typography fontSize={20} marginBottom={10} fontWeightIdx={1}>{route.params.data?.title}</Typography>
+          <View style={[styles.titleContainer, {justifyContent:'space-between', marginBottom: 8}]}>
+            <Typography color='#333' fontSize={13} >{DateFormmating(route.params.data?.date)}</Typography>
             <View style={{flexDirection:'row', alignItems:'center'}}>
               <Ionicons name="eye-outline" size={14} color="#E7AA0E" />
-              <Typography color='#E7AA0E' fontSize={13}> {route.params.data?.views}</Typography>
+              <Typography color='#E7AA0E' fontSize={13} > {route.params.data?.views}</Typography>
             </View>
           </View>
           <View style={styles.titleContainer}>
-            <Typography color='gray' fontSize={13}>{modifiedName} </Typography>
-            <Typography color='gray' fontSize={13}>{route.params.data?.userSchool}</Typography>
-            <Typography color='gray' fontSize={13}>{route.params.data?.userSchNum} </Typography>
-            <Typography color='gray' fontSize={13}>{route.params.data?.userPart}</Typography>
+            <Typography color='#333' fontSize={13} >{route.params.data?.userName === '관리자' ? '관리자' : modifiedName} </Typography>
+            <Typography color='#8C8C8C' fontSize={13} >{route.params.data?.userSchool}</Typography>
+            <Typography color='#8C8C8C' fontSize={13} >{route.params.data?.userSchNum} </Typography>
+            <Typography color='#8C8C8C' fontSize={13} >{route.params.data?.userPart}</Typography>
           </View>
         </View>   
-        
+          
         <Divider height={2} />
 
+        {
+          images.length > 0 &&
+          <View style={[styles.section, {height:500}]}>
+            <Image source={{uri: `${MainImageURL}/images/lessons/${images[1]}`}} style={{width:'100%', height:'100%', resizeMode:'contain', borderRadius:10}}/>
+          </View>
+        }
+      
         <View style={[styles.section, {marginBottom:20}]}>
-          <Typography fontSize={14} fontWeight='normal'>{route.params.data?.content}</Typography>
+          <Typography><Text style={{lineHeight:30}}>{route.params.data?.content}</Text></Typography>
         </View>
         
         <View style={[styles.section, {marginBottom:20, flexDirection:'row', alignItems:'center'}]}>
           <View style={{flexDirection:'row', alignItems:'center'}}>
             <Feather name="thumbs-up" size={14} color="#DD4A4A" />
-            <Typography fontSize={14} color='#DD4A4A'> {route.params.data?.isLiked}</Typography>
+            <Typography fontSize={14} color='#DD4A4A' > {route.params.data?.isLiked}</Typography>
           </View>
           <View style={{width:2, height:15, backgroundColor:'#BDBDBD', marginHorizontal:7}}></View>
           <View style={{flexDirection:'row', alignItems:'center'}}>
             <Ionicons name="chatbubble-ellipses-outline" size={14} color="#333" />
-            <Typography fontSize={14} color='#333'> {route.params.data?.commentCount}</Typography>
+            <Typography fontSize={14} color='#333' > {route.params.data?.commentCount}</Typography>
           </View>
-        </View>
-       
-        <View style={[styles.section, {backgroundColor:'rgba(215, 111, 35, 0.10)'}]}>
-          <Typography fontSize={12} fontWeight='normal'>성악하는 대학생들 커뮤니티에는 불건전하거나, 불법적인 내용 작성시, 서비스 사용에 제한이 있을 수 있습니다. 
-            아름답고 건전한 커뮤니티를 만들기 위해 커뮤니티 규정을 지켜주시기 바랍니다.</Typography>
         </View>
 
         <View style={{width:'100%', height:100, alignItems:'center', justifyContent:'center'}}>
@@ -265,6 +258,11 @@ function Detail (props: any) {
           </TouchableOpacity>
         </View>
        
+        <View style={[styles.section, {backgroundColor:'rgba(215, 111, 35, 0.10)'}]}>
+          <Typography fontSize={12} >성악과학생들 커뮤니티에는 불건전하거나, 불법적인 내용 작성시, 서비스 사용에 제한이 있을 수 있습니다. 
+            아름답고 건전한 커뮤니티를 만들기 위해 커뮤니티 규정을 지켜주시기 바랍니다.</Typography>
+        </View>
+
         <View style={[styles.section, {alignItems:'center'}]}>
           <TextInput
             style={[styles.addCommentInput, {width:'100%'}]}
@@ -292,12 +290,12 @@ function Detail (props: any) {
                 return (
                   <View style={styles.commentItem} key={index}>
                     <View style={styles.commentHeader}>
-                      <Typography>{modifiedName} </Typography>
+                      <Typography fontSize={13} >{modifiedName} </Typography>
                       <View style={{flex:1, flexDirection:'row', justifyContent:'space-between', alignItems:'center'}}>
                         <View style={{flexDirection: 'row'}}>
-                          <Typography color='#8C8C8C' fontSize={12}>{comment.userSchool}</Typography>
-                          <Typography color='#8C8C8C' fontSize={12}>{comment.userSchNum} </Typography>
-                          <Typography color='#8C8C8C' fontSize={12}>{comment.userPart}  </Typography>
+                          <Typography color='#8C8C8C' fontSize={12} >{comment.userSchool}</Typography>
+                          <Typography color='#8C8C8C' fontSize={12} >{comment.userSchNum} </Typography>
+                          <Typography color='#8C8C8C' fontSize={12} >{comment.userPart}  </Typography>
                         </View>
                         <TouchableOpacity
                          style={{padding:10}}
@@ -310,9 +308,9 @@ function Detail (props: any) {
                       </View>
                     </View>
                     <View style={{padding:10, marginBottom:10}}>
-                      <Typography fontSize={14} fontWeight='normal'>{comment.content}</Typography>        
+                      <Typography>{comment.content}</Typography>        
                     </View>
-                    <Typography color='#8C8C8C' fontSize={12} marginBottom={5}>{DateFormmating(comment.date)}</Typography>
+                    <Typography color='#8C8C8C' fontSize={12} marginBottom={5} >{DateFormmating(comment.date)}</Typography>
                     <Divider height={2} marginVertical={5}/>
                   </View>
                 )
@@ -411,8 +409,8 @@ const styles = StyleSheet.create({
     padding: 20
   },
   backButton: {
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
     alignItems: 'center',
     justifyContent:'center',
   },
@@ -426,7 +424,6 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flexDirection: 'row',
-    marginBottom: 8,
     alignItems: 'center'
   },
   postTitle: {
@@ -458,7 +455,7 @@ const styles = StyleSheet.create({
   Button: {
     width: 120,
     height: 50,
-    backgroundColor: 'black',
+    backgroundColor: '#000',
     padding: 12,
     borderRadius: 25,
     alignItems: 'center',

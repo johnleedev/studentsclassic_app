@@ -94,15 +94,15 @@ function DeleteAccount (props: any) {
       <View style={styles.noticeContainer}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <AntDesign name="warning" size={20} color="red" />
-          <Typography fontSize={24}> 유의 사항 안내</Typography>
+          <Typography fontSize={24} fontWeightIdx={1}> 유의 사항 안내</Typography>
         </View>
         
         <View style={styles.noticeBox}>
           <View style={styles.noticeTextBox}>
-            <Typography marginBottom={10} fontWeightIdx={2}>1. 회원 탈퇴 시, 즉시 탈퇴 처리되며, 서비스 이용이 불가합니다. </Typography>
-            <Typography marginBottom={10} fontWeightIdx={2}>2. 기존에 작성한 게시물 및 댓글은 자동으로 삭제되지 않습니다. 
+            <Typography marginBottom={10} >1. 회원 탈퇴 시, 즉시 탈퇴 처리되며, 서비스 이용이 불가합니다. </Typography>
+            <Typography marginBottom={10} >2. 기존에 작성한 게시물 및 댓글은 자동으로 삭제되지 않습니다. 
               또한 탈퇴 이후에는 작성자 본인을 확인할 수 없으므로, 삭제 처리도 불가합니다.</Typography>
-            <Typography fontWeightIdx={2}>3. 회원 정보는 탈퇴 즉시 삭제되지만, 부정 이용 거래 방지 및 전자상거래법 등
+            <Typography >3. 회원 정보는 탈퇴 즉시 삭제되지만, 부정 이용 거래 방지 및 전자상거래법 등
               관련 법령에 따라, 보관이 필요할 경우 해당 기간 동안 회원 정보가 보관 될 수 있습니다.</Typography>
           </View>
 
@@ -119,7 +119,7 @@ function DeleteAccount (props: any) {
               check ? <AntDesign name="checkcircle" size={20} color="red" />
             : <AntDesign name="checkcircleo" size={20} color="black" />
             }
-            <Typography fontSize={20}>  위 유의사항을 확인하였습니다.</Typography>
+            <Typography fontSize={20} fontWeightIdx={1}>  위 유의사항을 확인하였습니다.</Typography>
           </View>
           </TouchableOpacity> 
         </View>

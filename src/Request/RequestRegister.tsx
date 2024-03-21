@@ -4,41 +4,67 @@ import { Typography } from '../Components/Typography';
 import axios from 'axios';
 import MainURL from "../../MainURL";
 import { Divider } from '../Components/Divider';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import SelectDropdown from 'react-native-select-dropdown'
 import { ButtonBox } from '../Components/ButtonBox';
+import { SubTitle } from '../Components/SubTitle';
+import AsyncGetItem from '../AsyncGetItem';
 
 
-export default function Request (props : any) {
+export default function RequestRegister (props : any) {
+  const select = props.route.params.select;
+  const setword = props.route.params.setword ? props.route.params.setword : '';
+
+  // AsyncGetData
+  const [asyncGetData, setAsyncGetData] = useState<any>({});
+  const asyncFetchData = async () => {
+    try {
+      const data = await AsyncGetItem();
+      setAsyncGetData(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
+  useEffect(() => {
+    asyncFetchData();
+  }, []);
+
+  // 커스텀 탭 버튼 ----------------------------------------------------------------------
+  const [currentTab, setCurrentTab] = useState(select === 'Song' ? 1 : 2);
+
+  interface SelectMenuProps {
+    tabNum : number;
+    title: string;
+    select: string;
+  }
+  const SelectMenu: React.FC<SelectMenuProps> = ({ tabNum, title, select}) => {
+    return (
+      <TouchableOpacity
+      style={{width:70, alignItems:'center', paddingTop:10}}
+      onPress={() => {setCurrentTab(tabNum); setSelected(select)}}
+    >
+      <Typography fontSize={14} fontWeightIdx={1} color={currentTab === tabNum ? '#333' : '#8B8B8B'}>{title}</Typography>
+      {
+        currentTab === tabNum
+        ? <View style={{width:60, height:2, backgroundColor:'#333', marginTop:10}}></View>
+        : <View style={{width:60, height:2, backgroundColor:'#fff', marginTop:10}}></View>
+      }
+    </TouchableOpacity>
+    )    
+  }; 
   
   const currentTime = new Date();
   const currentDate = currentTime.toISOString().slice(0, 19);
 
-  const select = props.route.params.select;
-  const setword = props.route.params.setword ? props.route.params.setword : '';
+
   const [selected, setSelected] = useState(select);
   const [requestSort, setRequestSort] = useState('가곡');
   const [requestNation, setRequestNation] = useState('이태리');
   const [requestSongName, setRequestSongName] = useState('');
   const [requestAuthor, setRequestAuthor] = useState('');
   const [requestWord, setRequestWord] = useState(setword);
-
-  const optionsSort = ["가곡", "아리아"];
-  const optionsNation = ["이태리", "독일"];
-
-  const handleSortChange = (selected : any) => {
-    if (selected === "가곡") {setRequestSort('가곡');}
-    if (selected === "아리아") {setRequestSort('아리아');
-}
-  };
-  const handleNationChange = (selected : any) => {
-    if (selected === "이태리") {setRequestNation('이태리');}
-    if (selected === "독일") {
-      Alert.alert('준비중입니다.')
-      // setRequestNation('독일');
-    }
-  };
 
   const handleRequest = () => {
     Alert.alert(selected === 'Song' ? "곡 등록 요청 확인" : "단어 등록 요청 확인", 
@@ -57,12 +83,14 @@ export default function Request (props : any) {
       sort : requestSort, nation: requestNation,
       songName : requestSongName, author : requestAuthor,
       word : requestWord, date : currentDate,
-      response : '등록'
+      response : '신청',
+      userAccount : asyncGetData.userAccount,
+      userName : asyncGetData.userName
     })
     .then((res) => {
       if(res.data === true) {
         Alert.alert("요청되었습니다.");
-        props.navigation.replace("Main");
+        props.navigation.goBack();
       } else {
         Alert.alert(res.data);
       }
@@ -80,94 +108,69 @@ export default function Request (props : any) {
   return (
     <View style={styles.container}>
 
-      <View style={styles.section}>
-        <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between', height:40, marginBottom:10}}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={()=>{
-              props.navigation.goBack()
-            }}>
-            <EvilIcons name="arrow-left" size={30} color="black" />
-          </TouchableOpacity>
-          <View style={{flexDirection:'row'}}>
-            <Typography>등록 요청</Typography>
-          </View>
-        </View>
-        <Divider height={2}/>
+      <SubTitle title='등록 요청 하기' enTitle='' navigation={props.navigation}/>
+
+      <View style={{width:'100%', flexDirection: 'row', alignItems: 'flex-start', paddingLeft:10,
+                  borderBottomWidth:1, borderBottomColor:"#EFEFEF", marginBottom:20}}>
+        <SelectMenu tabNum={1} title='곡' select='Song'/>
+        <SelectMenu tabNum={2} title='단어' select='Word'/>
       </View>
+
       
       <View style={{paddingHorizontal:20, flex:1}}>
-        
-        <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginBottom:20}}>
-          <Typography>선택 : </Typography>
+        {
+        selected === 'Song' &&
+        <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginVertical:10}}>
+          <Typography fontWeightIdx={1}>형식 : </Typography>
           <TouchableOpacity 
-            style={[styles.selectButton, {borderColor: selected === 'Song' ? '#333' : '#DFDFDF' }]}
+            style={[styles.selectButton, {borderColor: requestSort === '가곡' ? '#333' : '#DFDFDF' }]}
             onPress={()=>{
-              setSelected('Song');
-              setRequestWord('');
+              setRequestSort('가곡')
             }}
           >
-            <Typography color={selected === 'Song' ? '#333' : '#DFDFDF'}>곡</Typography> 
+            <Typography color={requestSort === '가곡' ? '#333' : '#DFDFDF'} fontWeightIdx={1}>가곡</Typography> 
           </TouchableOpacity>
           <TouchableOpacity 
-            style={[styles.selectButton, {borderColor: selected === 'Word' ? '#333' : '#DFDFDF' }]}
+            style={[styles.selectButton, {borderColor: requestSort === '아리아' ? '#333' : '#DFDFDF' }]}
             onPress={()=>{
-              setSelected('Word');
-              setRequestSongName('');
-              setRequestAuthor('');
+              setRequestSort('아리아')
             }}
           >
-            <Typography color={selected === 'Word' ? '#333' : '#DFDFDF'}>단어</Typography> 
+            <Typography color={requestSort === '아리아' ? '#333' : '#DFDFDF'} fontWeightIdx={1}>아리아</Typography> 
+          </TouchableOpacity>
+        </View>
+        }
+
+        <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginVertical:10}}>
+          <Typography fontWeightIdx={1}>언어 : </Typography>
+          <TouchableOpacity 
+            style={[styles.selectButton, {borderColor: requestNation === '이태리' ? '#333' : '#DFDFDF' }]}
+            onPress={()=>{
+              setRequestNation('이태리')
+            }}
+          >
+            <Typography color={requestNation === '이태리' ? '#333' : '#DFDFDF'} fontWeightIdx={1}>이태리</Typography> 
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={[styles.selectButton, {borderColor: requestNation === '독일' ? '#333' : '#DFDFDF' }]}
+            onPress={()=>{
+              setRequestNation('독일')
+            }}
+          >
+            <Typography color={requestNation === '독일' ? '#333' : '#DFDFDF'} fontWeightIdx={1}>독일</Typography> 
           </TouchableOpacity>
         </View>
 
-        <Divider marginVertical={10}/>
-
-        <View style={{flexDirection:'row', justifyContent:'space-between', marginTop:10}}>
-          {
-            selected === 'Song' &&
-            <View style={styles.selectDropdown}>
-              <Typography fontSize={14} color='#8C8C8C' fontWeightIdx={2}>형식</Typography>
-              <SelectDropdown
-                data={optionsSort}
-                onSelect={(selectedItem, index) => {
-                  handleSortChange(selectedItem);
-                }}
-                defaultButtonText={optionsSort[0]}
-                buttonStyle={{width:90, height:30, backgroundColor:'#fff'}}
-                buttonTextStyle={{fontSize:12, fontWeight:'bold'}}
-                dropdownStyle={{width:100, borderRadius:10}}
-                rowStyle={{ width:100}}
-                rowTextStyle={{fontSize:12, fontWeight:'bold'}}
-              />
-            </View>
-          }
-          <View style={styles.selectDropdown}>
-            <Typography fontSize={14} color='#8C8C8C' fontWeightIdx={2}>언어</Typography>
-            <SelectDropdown
-              data={optionsNation}
-              onSelect={(selectedItem, index) => {
-                handleNationChange(selectedItem);
-              }}
-              defaultButtonText={optionsNation[0]}
-              buttonStyle={{width:90, height:30, backgroundColor:'#fff'}}
-              buttonTextStyle={{fontSize:12, fontWeight:'bold'}}
-              dropdownStyle={{width:100, borderRadius:10}}
-              rowStyle={{ width:100}}
-              rowTextStyle={{fontSize:12, fontWeight:'bold'}}
-            />
-          </View>
-        </View>
-        
+        <Divider marginVertical={5}/>
+        <Typography fontSize={14} color='#8C8C8C'> * 곡명과 작곡가를 잘 확인하고 요청해주세요.</Typography>
         {
           selected === 'Song'
           ?
           <>
           <View style={styles.seachBar}>
             <View style={[styles.flexBox, { alignItems:"center"}]}>
-              <Typography fontSize={14} color='#8C8C8C' fontWeightIdx={2}>곡명: </Typography>
+              <Typography fontSize={14} color='#333' >곡명: </Typography>
               <TextInput 
-                maxLength={20} 
                 placeholder="첫글자는 대문자로 적어주세요"
                 placeholderTextColor="#DBDBDB"
                 value={requestSongName}
@@ -182,9 +185,8 @@ export default function Request (props : any) {
 
           <View style={styles.seachBar}>
             <View style={[styles.flexBox, { alignItems:"center"}]}>
-              <Typography fontSize={14} color='#8C8C8C' fontWeightIdx={2}>작곡: </Typography>
+              <Typography fontSize={14} color='#333' >작곡가: </Typography>
               <TextInput 
-                maxLength={20} 
                 placeholder="첫글자는 대문자로 적어주세요"
                 placeholderTextColor="#DBDBDB"
                 value={requestAuthor}
@@ -200,9 +202,8 @@ export default function Request (props : any) {
           :
           <View style={styles.seachBar}>
             <View style={[styles.flexBox, { alignItems:"center"}]}>
-              <Typography fontSize={14} color='#8C8C8C' fontWeightIdx={2}>단어: </Typography>
+              <Typography fontSize={14} color='#8C8C8C' >단어: </Typography>
               <TextInput 
-                maxLength={20} 
                 value={requestWord}
                 onChange={(e)=>{setRequestWord(e.nativeEvent.text)}} 
                 style={{height:'100%', flex:1}}
@@ -232,8 +233,8 @@ const styles = StyleSheet.create({
     padding:20
   },
   backButton: {
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
     justifyContent:'center',
     alignItems:'center',
   },
@@ -249,7 +250,7 @@ const styles = StyleSheet.create({
   },
   selectButton : {
     width:'40%',
-    height: 50,
+    height: 40,
     borderWidth:1, 
     borderRadius:5, 
     paddingHorizontal:15,

@@ -27,7 +27,7 @@ export default function WordDetail (props : any) {
 
   const [word, setWord] = useState<WordsProps[]>([]);
   const [meaning, setMeaning] = useState<MeaningProps[]>([]);
-  const [isWordNoExist, setIsWordNoExist] = useState<boolean>(false)
+  const [isResdataFalse, setIsResdataFalse] = useState<boolean>(false);
 
   const fetchPosts = () => {
     axios.get(`${MainURL}/study/getworddata/${nation}/${setword}`)
@@ -39,7 +39,7 @@ export default function WordDetail (props : any) {
         const meaning = copy2.meaning ? JSON.parse(copy2.meaning) : [];
         setMeaning(meaning);
       } else {
-        setIsWordNoExist(true);
+        setIsResdataFalse(true);
       }
     })
     .catch((err:any)=>{
@@ -79,8 +79,8 @@ export default function WordDetail (props : any) {
     })
   }
   
-   return (
-   (word === undefined && meaning.length === 0) && !isWordNoExist
+  return (
+    word.length === 0 && !isResdataFalse // axios 반응이 없을때
     ?  (
     <View style={{flex:1, width:'100%', height:'100%'}}>
       <Loading /> 
@@ -89,7 +89,7 @@ export default function WordDetail (props : any) {
     <View style={styles.container}>
 
       <View style={[styles.section, {flexDirection:'row', justifyContent:'space-between', alignItems:'center'}]}>
-        <Typography fontSize={12} color='#8B8B8B'>{nation === 'Itary' ? '한국외국어대학교 지식출판원 이태리어-한국어사전' : ''}</Typography>
+        <Typography fontSize={12} color='#8B8B8B'>{nation === 'Itary' ? '한국외국어대학교 지식출판원 이태리어-한국어사전' : '민중서림 엣센스 독한사전'}</Typography>
         <TouchableOpacity
           onPress={()=>{
             props.navigation.goBack()
@@ -98,13 +98,12 @@ export default function WordDetail (props : any) {
         </TouchableOpacity>
       </View>
       <Divider height={2} marginVertical={10}/>
-      
       {
-        word.length > 0
+        !isResdataFalse // axios 반응이 있고, res.data가 true일때
         ?
         <ScrollView style={[styles.section]}>
           <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between', marginBottom:10}}>
-            <Typography fontSize={24} >{word[0].word}</Typography>
+            <Typography fontSize={24} fontWeightIdx={1}>{word[0].word}</Typography>
             <TouchableOpacity
              style={{borderRadius:5, borderWidth:1, borderColor:'#8B8B8B', padding:5}}
              onPress={handleWordReport}
@@ -113,19 +112,19 @@ export default function WordDetail (props : any) {
             </TouchableOpacity>
           </View>
           <View style={{width:'100%', alignItems:'flex-end', marginBottom:20}}>
-            <Typography fontSize={10} color='#8B8B8B'>* 단어의 의미가 올바르지 않은 경우, 수정요청 해주세요.</Typography>
+            <Typography fontSize={10} color='#8B8B8B'  >* 단어의 의미가 올바르지 않은 경우, 수정요청 해주세요.</Typography>
           </View>
-          { meaning !== undefined && meaning.length > 0 
+          { meaning.length > 0 
             ?
             meaning.map((item:any, index:any)=>{
 
               return (
                 <View key={index} style={{marginVertical:10}}>
                   <View style={{flexDirection:'row', alignItems:'center', marginBottom:10}}>
-                    <Typography >{item.num} </Typography>
+                    <Typography  fontWeightIdx={1}>{item.num} </Typography>
                     <Typography color='#8B8B8B' >{item.gender} </Typography>
                   </View>
-                  <Typography marginBottom={10}>{item.meaning}</Typography>
+                  <Typography marginBottom={10} >{item.meaning}</Typography>
                   {
                     item.addMeaning &&
                     <View style={{flexDirection:'row', alignItems:'center', flexWrap:'wrap', marginBottom:10}}>
@@ -136,7 +135,7 @@ export default function WordDetail (props : any) {
                             <View key={addMeaningIdx} style={{flexDirection:'row', flexWrap:'wrap', marginBottom:5}}>
                               <Typography>{addMeaning.addNum}</Typography>
                               <Typography color='#8B8B8B'>{addMeaning.addGender}</Typography>
-                              <Typography fontWeightIdx={2}>{addMeaning.addMeaning}</Typography>
+                              <Typography >{addMeaning.addMeaning}</Typography>
                             </View>
                           )
                         })
@@ -146,21 +145,24 @@ export default function WordDetail (props : any) {
                   {
                     item.relationWord &&
                     <View style={{flexDirection:'row', alignItems:'center', flexWrap:'wrap'}}>
-                      <Typography fontWeightIdx={2} fontSize={14}>유의어/반의어: </Typography>
-                      <Typography fontWeightIdx={2} fontSize={14}>{item.relationWord}</Typography>
+                      <Typography  fontSize={14}>유의어/반의어: </Typography>
+                      <Typography  fontSize={14}>{item.relationWord}</Typography>
                     </View>
                   }
                 </View>
               )
             })
             :
-            <View style={{alignItems:'center', marginTop:50}}>
-              <Typography>준비중입니다.</Typography>
+            <View style={{alignItems:'center', marginTop:20}}>
+              <Typography fontSize={14}  marginBottom={5}>사전에 없는 단어입니다.</Typography>
+              <Typography fontSize={14}  marginBottom={5}>어미(단어끝)가 변형된 단어이거나,</Typography>
+              <Typography fontSize={14} >지명,인명일수 있습니다.</Typography>
             </View>
           }
         <View style={{height:100}}></View>
       </ScrollView>
       :
+      // axios 반응이 있지만, res.data가 false일때
       <View style={[styles.section, {flex:1, alignItems:'center', justifyContent:'center'}]}>
         <Typography marginBottom={10} fontSize={24}>"{setword}"</Typography>
         <Typography>현재, 이 단어가 없습니다.</Typography>
@@ -170,12 +172,11 @@ export default function WordDetail (props : any) {
             props.navigation.navigate('Request', { select : 'Word', setword : setword})
           }}
         >
-          <Typography fontSize={12} fontWeightIdx={2} color='#E5625D'>단어 등록 요청</Typography>
+          <Typography fontSize={12}  color='#E5625D'>단어 등록 요청</Typography>
         </TouchableOpacity>
       </View>
       }
-
-      
+     
     </View>
     )
   );

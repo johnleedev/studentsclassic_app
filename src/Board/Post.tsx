@@ -9,11 +9,14 @@ import { Typography } from '../Components/Typography';
 import { SubTitle } from '../Components/SubTitle';
 import { ButtonBox } from '../Components/ButtonBox';
 import { Divider } from '../Components/Divider';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 function Post(props: any) {
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [currentTab, setCurrentTab] = useState(1);
+  const [sort, setSort] = useState('자유게시판');
 
   // 수정기능
   const route : any = useRoute();
@@ -64,7 +67,7 @@ function Post(props: any) {
     } else {
       axios
         .post(`${MainURL}/board/posts`, {
-          title: title, content: content, date: currentDate,
+          title: title, content: content, date: currentDate, sort: sort,
           userAccount : asyncGetData.userAccount,
           userName: asyncGetData.userName, userSchool: asyncGetData.userSchool, 
           userSchNum : asyncGetData.userSchNum, userPart : asyncGetData.userPart
@@ -88,38 +91,76 @@ function Post(props: any) {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <SubTitle title='글쓰기' enTitle='writing' navigation={props.navigation}/>
+    <View style={styles.container}>
+      <SubTitle title='자유게시판 글쓰기' enTitle='writing' navigation={props.navigation}/>
       <Divider height={2} />
-      <View style={styles.section}>
-      <View style={styles.userBox}>
-        <Typography><Entypo name="pencil" size={20} color="black"/> </Typography>
-        <Typography>{asyncGetData.userName} </Typography>
-        <Typography color='#8C8C8C'>{asyncGetData.userSchool}</Typography>
-        <Typography color='#8C8C8C'>{asyncGetData.userSchNum} </Typography>
-        <Typography color='#8C8C8C'>{asyncGetData.userPart}</Typography>
-      </View>
+      <ScrollView style={{flex:1}}>
+        <View style={styles.section}>
 
-      <View style={styles.addPostBox}>
-        <TextInput
-          style={[styles.input, styles.titleInput]}
-          placeholder="제목"
-          value={title}
-          onChangeText={setTitle}
-          multiline
-        />
-        <TextInput
-          style={[styles.input, styles.contentInput]}
-          placeholder="내용"
-          value={content}
-          onChangeText={setContent}
-          multiline
-        />
-      </View>
+          <View style={{padding:15, backgroundColor:'rgba(215, 111, 35, 0.10)', marginBottom:20}}>
+            <Typography fontSize={12} >장난스러운 글이나, 불건전하거나, 불법적인 내용 작성시, 경고 없이 곧바로 글은 삭제됩니다. 또한 사용자 계정은 서비스 사용에 제한이 있을 수 있습니다. </Typography>
+          </View>
 
-      <ButtonBox leftFunction={closeDetail} leftText='취소' rightFunction={createPost} rightText='작성'/>
-      </View>
-    </ScrollView>
+          <View style={{flexDirection:'row', marginBottom:10}}>
+            <TouchableOpacity
+              style={{flexDirection:'row', alignItems:'center', borderWidth:2, borderRadius:5, padding:10, marginRight:10,
+                      borderColor: currentTab === 1 ? '#333' :'#F5F4F3' }}
+              onPress={()=>{setCurrentTab(1); setSort('자유게시판')}}
+            >
+              <Ionicons name='chatbubble-ellipses-outline' color='#333' size={15} style={{marginRight:5}}/>
+              <Typography color= {currentTab === 1 ? '#333' : '#6F6F6F'} fontSize={12} fontWeightIdx={2}>자유게시판</Typography>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{flexDirection:'row', alignItems:'center', borderWidth:2, borderRadius:5, padding:10, marginRight:10,
+                      borderColor: currentTab === 2 ? '#333' :'#F5F4F3' }}
+              onPress={()=>{setCurrentTab(2); setSort('나도한마디')}}
+            >
+              <Entypo name='megaphone' color='#333' size={15} style={{marginRight:5}}/>
+              <Typography color= {currentTab === 2 ? '#333' : '#6F6F6F'} fontSize={12} fontWeightIdx={2}>나도한마디</Typography>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={{flexDirection:'row', alignItems:'center', borderWidth:2, borderRadius:5, padding:10, marginRight:10,
+                      borderColor: currentTab === 3 ? '#333' :'#F5F4F3' }}
+              onPress={()=>{setCurrentTab(3); setSort('질문있어요')}}
+            >
+              <Ionicons name='hand-right-outline' color='#333' size={15} style={{marginRight:5}}/>
+              <Typography color= {currentTab === 3 ? '#333' : '#6F6F6F'} fontSize={12} fontWeightIdx={2}>질문있어요</Typography>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.userBox}>
+            <Typography><Entypo name="pencil" size={20} color="black"/> </Typography>
+            <Typography>{asyncGetData.userName} </Typography>
+            <Typography color='#8C8C8C'>{asyncGetData.userSchool}</Typography>
+            <Typography color='#8C8C8C'>{asyncGetData.userSchNum} </Typography>
+            <Typography color='#8C8C8C'>{asyncGetData.userPart}</Typography>
+          </View>
+
+          <View style={styles.addPostBox}>
+            <TextInput
+              style={[styles.input, styles.titleInput]}
+              placeholder="제목"
+              value={title}
+              onChangeText={setTitle}
+              multiline
+            />
+            <TextInput
+              style={[styles.input, styles.contentInput]}
+              placeholder="내용"
+              value={content}
+              onChangeText={setContent}
+              multiline
+            />
+          </View>
+
+        </View>
+
+        <ButtonBox leftFunction={closeDetail} leftText='취소' rightFunction={createPost} rightText='작성'/>
+        <View style={{height:100}}></View>
+      </ScrollView>
+
+      
+    </View>
   );
 }
 
@@ -140,7 +181,6 @@ const styles = StyleSheet.create({
   },
   addPostBox: {
     marginBottom: 8,
-    padding:10
   },
   addTitleText: {
     fontSize: 16,
@@ -149,9 +189,8 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   userBox: {
-    padding:15,
     flexDirection: 'row',
-    marginVertical: 5,
+    marginVertical: 10,
     alignItems: 'center'
   },
   input: {
@@ -168,7 +207,7 @@ const styles = StyleSheet.create({
     minHeight: 40,
   },
   contentInput: {
-    minHeight: 200,
+    minHeight: 280,
     textAlignVertical: 'top',
   }
 });

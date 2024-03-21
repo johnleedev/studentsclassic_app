@@ -159,8 +159,6 @@ export default function NotificationSetting (props : any) {
       <View style={[styles.section, {flex:1}]}>
         <CustomSwitch title='공지사항 알림' value={isNotifiNotice} setValue={setIsNotifiNotice} toggleFuncfion={handleToggleNotifiNotice} />
         <CustomSwitch title='게시판 새글 알림' value={isNotifiBoard} setValue={setIsNotifiBoard} toggleFuncfion={handleToggleNotifiBoard} />
-        <CustomSwitch title='연주회,콩쿨,구인 정보 새글 알림' value={isNotifiInfo} setValue={setIsNotifiInfo} toggleFuncfion={handleToggleNotifiInfo} />
-        <CustomSwitch title='우리끼리 콩쿨 새글 알림' value={isNotifiOurConcour} setValue={setIsNotifiOurConcour} toggleFuncfion={handleToggleNotifiOurConcour} />
       </View>
 
       <ButtonBox leftFunction={closeNotifiSetting} leftText='취소' rightFunction={handleSaveSettings} rightText='설정완료' />
@@ -174,6 +172,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    paddingBottom:10
   },
   section: {
     padding: 20

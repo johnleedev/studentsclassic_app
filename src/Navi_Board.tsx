@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Main from './Board/BoardMain';
+import Main from './Board/Main';
 import Detail from "./Board/Detail";
 import Post from './Board/Post';
 
 const Stack = createNativeStackNavigator();
 
-function Board() {
+function Navi_Board() {
   return (
     <Stack.Navigator 
       screenOptions={{headerShown: false}}
@@ -17,4 +17,4 @@ function Board() {
     </Stack.Navigator>
   );
 }
-export default Board;
+export default Navi_Board;

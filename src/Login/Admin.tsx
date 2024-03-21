@@ -54,7 +54,7 @@ export default function Admin (props : any) {
         <View style={styles.seachBar}>
           <View style={[styles.flexBox, { alignItems:"center"}]}>
             <TextInput 
-              maxLength={20} 
+              maxLength={30} 
               placeholder={'아이디'}
               placeholderTextColor="#8C8C8C"
               value={inputID}
@@ -66,7 +66,7 @@ export default function Admin (props : any) {
         <View style={styles.seachBar}>
           <View style={[styles.flexBox, { alignItems:"center"}]}>
             <TextInput 
-              maxLength={20} 
+              maxLength={30} 
               placeholder={'비밀번호'}
               placeholderTextColor="#8C8C8C"
               value={inputPW}

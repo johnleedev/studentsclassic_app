@@ -2,7 +2,6 @@ import * as React from "react";
 import { KeyboardAvoidingView, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { PaperProvider } from 'react-native-paper';
 import SplashLoading from "./SplashLoading";
 import Main from "./src/Main";
 import Navi_Login from './src/Login/Navi_Login'
@@ -10,7 +9,9 @@ import messaging from '@react-native-firebase/messaging';
 import CodePush from "react-native-code-push";
 import Toast, { BaseToast } from "react-native-toast-message";
 import { AppRegistry } from 'react-native';
-
+import Navi_Notifi from "./src/Navi_Notifi";
+import { RecoilRoot } from "recoil";
+import Navi_Request from "./src/Navi_Request";
 
 const Stack = createNativeStackNavigator();
 
@@ -45,16 +46,20 @@ function App () {
 
 
   return (
-    <PaperProvider>
-      <NavigationContainer>
+    
+    <NavigationContainer>
+      <RecoilRoot>
         <Stack.Navigator>
           <Stack.Screen name="SplashLoading" component={SplashLoading} options={{ headerShown: false }} />
           <Stack.Screen name="Navi_Main" component={Main} options={{ headerShown: false }} />
           <Stack.Screen name="Navi_Login" component={Navi_Login} options={{ headerShown: false }}/>
+          <Stack.Screen name="Navi_Notifi" component={Navi_Notifi} options={{ headerShown: false }} />
+          <Stack.Screen name="Navi_Request" component={Navi_Request} options={{ headerShown: false }} />
         </Stack.Navigator>
-      </NavigationContainer>
-      <Toast config={toastConfig}/>
-    </PaperProvider>
+        <Toast config={toastConfig}/>
+      </RecoilRoot>
+    </NavigationContainer>
+   
   );
 
 };

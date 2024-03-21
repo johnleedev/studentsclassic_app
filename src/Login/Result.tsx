@@ -29,12 +29,12 @@ export default function Result (props : any) {
           style={{width:"100%",height:"100%"}}>
         
         <View style={{flex:1, width:'100%', justifyContent: 'center'}}>
-          <Typography fontSize={28} marginBottom={5}>{asyncGetData.userName}님</Typography>
-          <Typography fontSize={28} marginBottom={8}>회원가입이 완료되었어요!</Typography>
+          <Typography fontSize={28} marginBottom={5} fontWeightIdx={1}>{asyncGetData.userName}님</Typography>
+          <Typography fontSize={28} marginBottom={8} fontWeightIdx={1}>회원가입이 완료되었어요!</Typography>
           <Typography fontSize={12} marginBottom={3}>학교 : {asyncGetData.userSchool}</Typography>
           <Typography fontSize={12} marginBottom={3}>학번 : {asyncGetData.userSchNum}</Typography>
           <Typography fontSize={12} marginBottom={15}>파트 : {asyncGetData.userPart}</Typography>
-          <Typography fontSize={12} fontWeightIdx={1}>성악하는 대학생들의 다양한 컨텐츠에 참여해보세요.</Typography>
+          <Typography fontSize={12} fontWeightIdx={1}>"성악과학생들"의 다양한 컨텐츠에 참여해보세요.</Typography>
         </View>
         
         <View style={{justifyContent: 'center', alignItems:'center'}}>

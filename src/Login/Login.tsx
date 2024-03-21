@@ -139,7 +139,7 @@ export default function Login (props : any) {
     <View style={Platform.OS === 'android' ? styles.android : styles.ios}>
       <View style={styles.container}>
         <View style={styles.mainlogo}>
-          <Image source={require('../images/login/loginlogo.png')}/>
+          <Image source={require('../images/login/loginlogo.png')} style={{height:180, resizeMode:'contain'}}/>
         </View>
 
         <View  style={{width: '100%', alignItems: 'center', marginVertical: 20}}>
@@ -224,7 +224,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 20,
-    height: 250,
   },
   loginButton : {
     alignItems: 'center',

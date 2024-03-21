@@ -2,31 +2,29 @@ import React, { useEffect, useState } from 'react';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, StyleSheet, StatusBar, TouchableOpacity} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import axios from 'axios';
-import MainURL from "../../../MainURL";
-import { Typography } from '../../Components/Typography';
-import { SubTitle } from '../../Components/SubTitle';
-import { Divider } from '../../Components/Divider';
-import DateFormmating from '../../Components/DateFormmating';
+import MainURL from "../../MainURL";
+import { Typography } from '../Components/Typography';
+import { SubTitle } from '../Components/SubTitle';
+import { Divider } from '../Components/Divider';
+import DateFormmating from '../Components/DateFormmating';
 
 const Stack = createNativeStackNavigator();
 
-const NoticeDetail = ({ route, navigation } : any) => {
+const NoticeDetail = (props : any) => {
   
-  const data = route.params.data;
+  const data = props.route.params.data;
 
   return (
     <View style={styles.container}>
+      <SubTitle title='' enTitle='' navigation={props.navigation}/>
+      <Divider/>
       <View style={styles.noticeContainer}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Feather name="x" size={24} color="black" />
-          </TouchableOpacity>
-        </View>
-        <Typography fontSize={18} marginBottom={10}>{data.title}</Typography>
-        <Typography fontSize={12} color='#8C8C8C'>{DateFormmating(data.date)}</Typography>
+        <Typography fontSize={18} marginBottom={10} fontWeightIdx={1}>{data.title}</Typography>
+        <Typography fontSize={12} color='#8C8C8C' >{data.date}</Typography>
         <Divider height={2} marginVertical={10}/>
-        <Typography marginBottom={4}>{data.content}</Typography>
+        <Typography marginBottom={4} >{data.content}</Typography>
       </View>
     </View>
   );
@@ -56,8 +54,10 @@ const Notice = () => {
   const NoticeList = ( props :any) => {
     return (
       <View style={styles.container}>
+
         <SubTitle title='공지사항' enTitle='Notice' navigation={props.navigation}/>
         <Divider height={2}/>
+        
         <View style={styles.section}>
         {
           data.map((item:any, index:any)=>{
@@ -67,13 +67,14 @@ const Notice = () => {
                 style={styles.item}
                 onPress={() => props.navigation.navigate('NoticeDetail', { data : item })}
               >
-                <View style={styles.itemIconContainer}>
-                  <Feather name="info" size={24} color="gray" />
+                <View style={{width:'100%', flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginBottom:5}}>
+                  <View>
+                    <Typography marginBottom={4} fontWeightIdx={1}>{item.title}</Typography>
+                    <Typography fontSize={14} >{item.date}</Typography>
+                  </View>
+                  <AntDesign name='right'/>
                 </View>
-                <View style={styles.itemContent}>
-                  <Typography fontSize={18} marginBottom={4}>{item.title}</Typography>
-                  <Typography fontSize={14} marginBottom={4}>{DateFormmating(item.date)}</Typography>
-                </View>
+                <Divider height={2} marginVertical={5}/>
               </TouchableOpacity>
             )
           })
@@ -97,26 +98,15 @@ const Notice = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
     backgroundColor:'#fff',
   },
   section: {
     padding:20
   },
   item: {
-    flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 16,
-    marginVertical: 1,
+    marginVertical: 10,
     borderRadius: 8,
-  },
-  itemIconContainer: {
-    marginRight: 16,
-  },
-  itemContent: {
-    flex: 1,
   },
   header: {
     flexDirection: 'row',
@@ -126,7 +116,7 @@ const styles = StyleSheet.create({
   noticeContainer: {
     flex: 1,
     backgroundColor: '#fff',
-    padding: 20
+    padding:20
   },
   
 });

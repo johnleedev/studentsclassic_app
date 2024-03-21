@@ -37,7 +37,7 @@ export default function SplashLoading (props: any) {
   };
 
   const checkVersion = (data : any) => {
-    if (data[1].notice === MainVersion || data[2].notice === MainVersion) {
+    if (data[1].notice === MainVersion || data[2].notice === MainVersion || data[3].notice === MainVersion) {
        checkToken();
     } else {
       Alert.alert(

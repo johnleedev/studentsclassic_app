@@ -44,7 +44,7 @@ export default function Notification (props : any) {
       <Divider height={2} />
 
       <View style={styles.section}>
-        <Typography fontSize={20}>오늘의 알림</Typography>
+        <Typography fontSize={18} fontWeightIdx={1}>오늘의 알림</Typography>
 
         <View style={{position:'absolute', right:20, top:10}}>
           <TouchableOpacity
@@ -61,8 +61,8 @@ export default function Notification (props : any) {
             <View key={index}
               style={{marginVertical: 10, borderWidth:1, borderColor:'#BDBDBD', borderRadius:10, padding:10}} 
             >
-              <Typography marginBottom={5}>{item.notifiTitle}</Typography>
-              <Typography fontSize={14} fontWeightIdx={2}>{item.notifiMessage}</Typography>
+              <Typography marginBottom={5} fontWeightIdx={1}>{item.notifiTitle}</Typography>
+              <Typography fontSize={14} >{item.notifiMessage}</Typography>
               <View style={{width:'100%', alignItems:'flex-end'}}>
                 <Typography fontSize={12} color='#8C8C8C'>{DateFormmating(item.date)}</Typography>
               </View>
@@ -76,15 +76,15 @@ export default function Notification (props : any) {
       <Divider height={2} />
 
       <View style={styles.section}>
-      <Typography fontSize={20}>지난 알림</Typography>
+      <Typography fontSize={18} fontWeightIdx={1}>지난 알림</Typography>
       {
         lastNotifi.map((item: any, index: any)=>{
           return (
             <View key={index}
               style={{marginVertical: 10, borderWidth:1, borderColor:'#BDBDBD', borderRadius:10, padding:10}} 
             >
-              <Typography marginBottom={5}>{item.notifiTitle}</Typography>
-              <Typography fontSize={14} fontWeightIdx={2}>{item.notifiMessage}</Typography>
+              <Typography marginBottom={5}  fontWeightIdx={1}>{item.notifiTitle}</Typography>
+              <Typography fontSize={14} >{item.notifiMessage}</Typography>
               <View style={{width:'100%', alignItems:'flex-end', marginTop:10}}>
                 <Typography fontSize={12} color='#8C8C8C'>{DateFormmating(item.date)}</Typography>
               </View>

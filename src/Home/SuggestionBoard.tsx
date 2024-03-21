@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
 import axios from 'axios';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useRoute } from '@react-navigation/native';
 import MainURL from "../../MainURL";
 import AsyncGetItem from '../AsyncGetItem'
@@ -98,7 +99,7 @@ export default function SuggestionBoard (props : any) {
       <View style={[styles.addSuggestionContainer]}>
         <View style={styles.addTitleBox}>
           <Typography marginBottom={4} color='#8C8C8C' fontSize={12}>
-            '성악하는대학생들' 어플 운영에 관한 제안을, 자유롭게 건의해주세요.
+            '성악과학생들' 어플 운영에 관한 제안을, 자유롭게 건의해주세요.
           </Typography>
         </View>
         <TextInput
@@ -110,10 +111,10 @@ export default function SuggestionBoard (props : any) {
         />
         <View style={{flexDirection:'row', justifyContent:'flex-end', marginRight:5}}>
           <View style={styles.addTitleTextbox}>
-            <Typography color='#8C8C8C' fontSize={12}>{asyncGetData.userName} </Typography>
-            <Typography color='#8C8C8C' fontSize={12}>{asyncGetData.userSchool}</Typography>
-            <Typography color='#8C8C8C' fontSize={12}>{asyncGetData.userSchNum} </Typography>
-            <Typography color='#8C8C8C' fontSize={12}>{asyncGetData.userPart}</Typography>
+            <Typography color='#8C8C8C' fontSize={12} >{asyncGetData.userName} </Typography>
+            <Typography color='#8C8C8C' fontSize={12} >{asyncGetData.userSchool}</Typography>
+            <Typography color='#8C8C8C' fontSize={12} >{asyncGetData.userSchNum} </Typography>
+            <Typography color='#8C8C8C' fontSize={12} >{asyncGetData.userPart}</Typography>
           </View>
           <TouchableOpacity
             style={styles.addSuggestionButton}
@@ -126,18 +127,32 @@ export default function SuggestionBoard (props : any) {
         <Typography marginBottom={20} color='#8C8C8C' fontSize={12}>* 건의 목록 (최근 5개의 게시글만 보여집니다.)</Typography>
         {
           suggestionToShow.slice(0,5).map((item:any, index:any)=>{
+
+            const firstCharacter = item.userName.charAt(0);
+            const restOfTheString = 'O'.repeat(item.userName.length - 1);
+            const modifiedName = firstCharacter + restOfTheString;
+
             return(
               <View key={index} style={{minHeight:50}}>
-                <Typography marginBottom={10} fontWeightIdx={2}>{item.content}</Typography>
+                <Typography marginBottom={10} >{item.content}</Typography>
                 <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-                  <Typography color='#8C8C8C' fontSize={12}>{DateFormmating(item.date)}</Typography>
+                  <Typography color='#8C8C8C' fontSize={12} >{DateFormmating(item.date)}</Typography>
                   <View style={{flexDirection:'row', marginBottom:5}}>
-                    <Typography color='#8C8C8C' fontSize={12}>{item.userName} </Typography>
-                    <Typography color='#8C8C8C' fontSize={12}>{item.userSchool}</Typography>
-                    <Typography color='#8C8C8C' fontSize={12}>{item.userSchNum} </Typography>
-                    <Typography color='#8C8C8C' fontSize={12}>{item.userPart}</Typography>
+                    <Typography color='#8C8C8C' fontSize={12} >{modifiedName} </Typography>
+                    <Typography color='#8C8C8C' fontSize={12} >{item.userSchool}</Typography>
+                    <Typography color='#8C8C8C' fontSize={12} >{item.userSchNum} </Typography>
+                    <Typography color='#8C8C8C' fontSize={12} >{item.userPart}</Typography>
                   </View>
                 </View>
+                {
+                  item.response &&
+                  <View style={{marginVertical:10, flexDirection:'row'}}>
+                    <MaterialCommunityIcons name='arrow-right-bottom' color='#BDBDBD' size={12} style={{marginRight:5}}/>
+                    <View style={{ width:'90%', flexDirection:'row', flexWrap:'wrap', justifyContent:'space-between'}}>
+                      <Typography  fontSize={14}>{item.response}</Typography>
+                    </View>
+                  </View>
+                }
                 <View style={{alignItems:'flex-end'}}>
                   <TouchableOpacity
                     onPress={()=>{
@@ -168,8 +183,8 @@ export default function SuggestionBoard (props : any) {
             }}
           >
             <View style={{flexDirection:'row', alignItems:'center'}}>
-              <Typography color='#333'>더보기 </Typography>
-              <AntDesign name="down" size={20} color="#333"/>
+              <Typography color='#8C8C8C'  fontSize={14}>더보기 </Typography>
+              <AntDesign name="down" size={16} color="#8C8C8C"/>
             </View>
           </TouchableOpacity>
         }
@@ -227,8 +242,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   button: {
-    borderWidth:1,
-    borderColor: '#8C8C8C',
+    borderBottomWidth:1,
+    borderColor: '#EAEAEA',
     padding: 12,
     borderRadius: 8,
     alignItems: 'center',

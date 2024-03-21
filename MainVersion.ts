@@ -1,3 +1,3 @@
-let MainVersion = "1.5.0"
+let MainVersion = "1.5.5"
 
 export default MainVersion

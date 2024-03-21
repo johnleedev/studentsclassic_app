@@ -109,10 +109,10 @@ export default function Agree (props : any) {
         <View style={{flex:1, marginVertical: 20}}>
           <Image source={require('../images/login/note.png')} style={{width:62, height:64, marginBottom: 10}}/>
           <Typography fontSize={24}>
-            성악하는 대학생들에{'\n'}
+            성악과학생들에{'\n'}
             오신것을 환영해요!
           </Typography>
-          <Typography fontSize={12} fontWeightIdx={2}>원활한 서비스 이용을 위해, 아래 항목에 동의해 주세요.</Typography>
+          <Typography fontSize={12} >원활한 서비스 이용을 위해, 아래 항목에 동의해 주세요.</Typography>
         </View>
 
         <View style={{flex:2}}> 
@@ -125,7 +125,7 @@ export default function Agree (props : any) {
               { isAllCheck ? <AntDesign name="checkcircle" size={20} color="black" style={styles.checkboxicon} />
               : <AntDesign name="checkcircleo" size={20} color="black" style={styles.checkboxicon} /> }
               <View>
-                <Typography fontSize={14}>성악하는 대학생들 이용약관 전체 동의</Typography>
+                <Typography fontSize={14}>성악과학생들 이용약관 전체 동의</Typography>
                 <Typography fontSize={10} color='gray'>[선택] 개인정보 제3자 정보제공 동의를 포함하여 전체 동의합니다.</Typography>
               </View>
             </TouchableOpacity>
