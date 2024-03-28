@@ -9,10 +9,6 @@ import AsyncSetItem from '../AsyncSetItem'
 import { Typography } from '../Components/Typography';
 import { Divider } from '../Components/Divider';
 
-
-
-
-
 function Logister2 (props : any) {
 
   const [isSchoolModalVisible, setSchoolModalVisible] = useState(false);
