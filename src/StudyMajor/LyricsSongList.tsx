@@ -7,7 +7,7 @@ import MainURL from "../../MainURL";
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import SelectDropdown from 'react-native-select-dropdown'
-import Loading from '../Components/Loading';
+import { Loading } from '../Components/Loading';
 import { Divider } from '../Components/Divider';
 
 export default function LyricsSongList (props : any) {

@@ -5,7 +5,7 @@ import { Typography } from '../Components/Typography';
 import axios from 'axios';
 import MainURL from "../../MainURL";
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Loading from '../Components/Loading';
+import { Loading } from '../Components/Loading';
 import { Divider } from '../Components/Divider';
 import DateFormmating from '../Components/DateFormmating';
 import { SubTitle } from '../Components/SubTitle';

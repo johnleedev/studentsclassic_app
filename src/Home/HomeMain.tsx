@@ -131,7 +131,7 @@ function HomeMain(props : any) {
     <View style={styles.container}>
 
       {
-        mainModal !== undefined && !isViewedMainModal &&
+        mainModal !== undefined && mainModal.url !== null && !isViewedMainModal &&
         <>
           <View style={{position:'absolute', top:0, width:'100%', height:'100%',
                         alignItems:'center', justifyContent:'center', zIndex:8}}>
@@ -217,32 +217,43 @@ function HomeMain(props : any) {
         <Divider height={5} />
 
         {/* 스터디 */}
-        <View style={styles.section}>
-          <TouchableOpacity 
-            style={{height:230, borderWidth:1, borderColor:'#8C8C8C', borderRadius:5}}
-            activeOpacity={0.9}
+        <View style={{padding:20, alignItems:'center'}}>
+          <Typography fontSize={18} marginBottom={10} fontWeightIdx={1}>NOTICE</Typography>
+          <View style={{width:'100%', padding:15, backgroundColor:'rgba(215, 111, 35, 0.10)', alignItems:'center', marginBottom:10}}>
+            <Typography marginBottom={5}>성악과학생들에 오신 여러분들을 환영합니다.</Typography>
+            <Typography marginBottom={5}>앱이 시작되고 한번 꺼졌다가 다시 켜지는 것은</Typography>
+            <Typography marginBottom={5}>오류가 아니라 자동 업데이트 되는 것입니다.</Typography>
+            <Typography marginBottom={5}>그외 다른 불편하신 사항이 있으시면,</Typography>
+            <Typography>아래 문의하기나 카카오채널을 이용해주세요.</Typography>
+          </View>
+          <TouchableOpacity
+            style={{width:250, flexDirection:'row', justifyContent:'space-between', alignItems:'center', 
+                      borderWidth:1, borderRadius:10, borderColor:'#EAEAEA', padding:10, marginBottom:10}}
             onPress={()=>{
-              props.navigation.navigate('Navi_Study', {screen : 'Main'})
+              Linking.openURL("http://pf.kakao.com/_YrCrG");
             }}
-          >
-              <ImageBackground 
-               source={require("../images/desk.jpg")}
-               style={{width:"100%",height:"100%", opacity:0.9}}
-              >
-                <View style={{padding:10, width:"100%",height:"100%"}}>
-                  <View style={{backgroundColor:'#fff', width:'100%', padding:10, borderRadius:5}}>
-                    <Typography marginBottom={10} fontWeightIdx={1}>성악과 학생들을 위한 특별한 서비스</Typography>  
-                    <Typography fontSize={14} fontWeightIdx={1} marginBottom={3}>새로운 곡의 가사를 해석할때</Typography>
-                    <Typography fontSize={14} fontWeightIdx={1} marginBottom={3}>이전의 불편한 방식은 이제 그만!</Typography>
-                    <Typography fontSize={14} fontWeightIdx={1}>쉽고 편하게 단어 뜻을 찾을수 있어요.</Typography>
-                  </View>
-                  <View style={{backgroundColor:'#fff', paddingHorizontal:10, paddingVertical:5, borderRadius:5,
-                                position:'absolute', bottom:10, right:10, flexDirection:'row', alignItems:'center'}}>
-                    <Typography fontWeightIdx={1}>스터디 바로가기</Typography>
-                    <AntDesign name='right' style={{marginLeft:10}}/>
-                  </View>                
-                </View>
-              </ImageBackground>
+             >
+            <View style={{width:30, alignItems:'center'}}>
+              <Image
+                source={require("../images/login/kakao.png")}
+                style={{width:25, height:25, resizeMode:'contain'}}>
+              </Image>
+            </View>
+            <Typography>카카오채널로 문의하기</Typography>
+            <AntDesign name='right' size={16} color='#333'/>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={()=>{
+              props.navigation.navigate('SuggestionBoard')
+            }}
+            style={{width:250, flexDirection:'row', justifyContent:'space-between', alignItems:'center', 
+                    borderWidth:1, borderRadius:10, borderColor:'#EAEAEA', padding:10}}
+             >
+            <View style={{width:30, alignItems:'center'}}>
+              <AntDesign name='filetext1' size={22} color='#333'/>
+            </View>
+            <Typography>문의하기 게시판</Typography>
+            <AntDesign name='right' size={16} color='#333'/>
           </TouchableOpacity>
         </View>
 
@@ -279,16 +290,11 @@ function HomeMain(props : any) {
         
         {/* 곡 등록 요청 목록 */}
         <RequestBoard navigation={props.navigation}/>
-
-        {/* 건의하기 게시판 */}
-        <SuggestionBoard/>
-
-        
+   
     
       </ScrollView>
       </KeyboardAvoidingView>
-     
-           
+         
 
     </View> 
    );

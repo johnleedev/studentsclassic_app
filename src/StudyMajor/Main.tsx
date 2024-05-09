@@ -4,8 +4,9 @@ import { Typography } from '../Components/Typography';
 import { Title } from '../Components/Title';
 import LyricsSongList from './LyricsSongList';
 import WordList from './WordList';
-import Loading from '../Components/Loading';
+import { Loading } from '../Components/Loading';
 import LyricsAriaList from './LyricsAriaList';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 export default function Main (props : any) {
 
@@ -46,12 +47,13 @@ export default function Main (props : any) {
         
         <TouchableOpacity 
           style={{position:'absolute', right:22, bottom:10, borderRadius:5,
-                      borderWidth:1, borderColor:'#555', padding:5}}
+                      borderWidth:1, borderColor:'#555', padding:5, flexDirection:'row', alignItems:'center'}}
           onPress={()=>{
-            props.navigation.navigate('Navi_Request', {screen : 'RequestMain'})
+            props.navigation.navigate('MusicMain')
           }}
         >
-          <Typography fontSize={14} color='#555' >요청게시판</Typography>
+          <Typography fontSize={14} color='#555' >음악스터디 </Typography>
+          <AntDesign name='right'  color='#555' />
         </TouchableOpacity>
       </View>
       

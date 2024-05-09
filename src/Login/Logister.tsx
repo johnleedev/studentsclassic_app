@@ -121,7 +121,7 @@ function Logister (props : any) {
           </View>
           
           <View style={{flex:2}}>
-            <Typography color='#8C8C8C' fontWeightIdx={1}>이메일 주소 <Typography color='#E94A4A'>*</Typography></Typography>
+            <Typography color='#8C8C8C' fontWeightIdx={1}>이메일 주소 <Typography color='#E94A4A' fontSize={12}>(필수)</Typography></Typography>
             <View style={{flexDirection:'row'}}>
               <View style={{width:21, height:40, justifyContent:'flex-end'}}>
                 { userURL === 'kakao' && <Image source={require('../images/login/kakao.png')} style={{width:20, height:20}}/>}
@@ -148,7 +148,7 @@ function Logister (props : any) {
               </Text>
             )}
 
-            <Typography color='#8C8C8C' fontWeightIdx={1}>이름 <Typography color='#E94A4A'>*</Typography></Typography>
+            <Typography color='#8C8C8C' fontWeightIdx={1}>이름 <Typography color='#E94A4A' fontSize={12}>(필수)</Typography></Typography>
             <TextInput
               style={[styles.input, {width: '100%'}]}
               placeholder="이름"

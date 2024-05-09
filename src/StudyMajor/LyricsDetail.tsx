@@ -5,7 +5,7 @@ import axios from 'axios';
 import MainURL from "../../MainURL";
 import { Divider } from '../Components/Divider';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Loading from '../Components/Loading';
+import { Loading } from '../Components/Loading';
 import YoutubePlayer from "react-native-youtube-iframe";
 
 export default function LyricsDetail (props : any) {

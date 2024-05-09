@@ -225,13 +225,6 @@ function Detail (props: any) {
         </View>   
           
         <Divider height={2} />
-
-        {
-          images.length > 0 &&
-          <View style={[styles.section, {height:500}]}>
-            <Image source={{uri: `${MainImageURL}/images/lessons/${images[1]}`}} style={{width:'100%', height:'100%', resizeMode:'contain', borderRadius:10}}/>
-          </View>
-        }
       
         <View style={[styles.section, {marginBottom:20}]}>
           <Typography><Text style={{lineHeight:30}}>{route.params.data?.content}</Text></Typography>

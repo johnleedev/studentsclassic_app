@@ -8,7 +8,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import { Title } from '../Components/Title';
 import { Divider } from '../Components/Divider';
 import SelectDropdown from 'react-native-select-dropdown'
-import Loading from '../Components/Loading';
+import { Loading } from '../Components/Loading';
 
 export default function WordList (props : any) {
 

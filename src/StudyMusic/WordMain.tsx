@@ -2,7 +2,7 @@ import React, { useState, useEffect} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Typography } from '../Components/Typography';
 import { Title } from '../Components/Title';
-import Loading from '../Components/Loading';
+import { Loading } from '../Components/Loading';
 import WordSearch from './WordSearch';
 import WordStudy from './WordStudy';
 import WordQuizSelect from './WordQuizSelect';

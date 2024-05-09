@@ -3,12 +3,13 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Platform, StatusBar } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import Navi_Home from './Navi_Home';
+import Navi_LessonNote from './Navi_LessonNote';
 import Navi_Board from './Navi_Board';
 import Navi_MyPage from './Navi_MyPage';
-import Navi_StudyMajor from './Navi_StudyMajor';
-import Navi_StudyMusic from './Navi_StudyMusic';
+import Navi_StudyMajor from './Navi_Study';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {checkNotifications, requestNotifications} from 'react-native-permissions';
 import messaging from '@react-native-firebase/messaging';
@@ -17,8 +18,7 @@ import MainURL from "../MainURL";
 import AsyncGetItem from './AsyncGetItem'
 import { useRoute } from '@react-navigation/native';
 import MainVersion from '../MainVersion';
-import Navi_Mentoring from './Navi_Mentoring';
-
+import Navi_Video from './Navi_Video';
 
 
 const Tab = createBottomTabNavigator();
@@ -110,22 +110,22 @@ export default function Main (props : any) {
           <Ionicons name="home" size={24} color={ focused ? "#000" : "#BDBDBD" }/>
         }}
       />
-      <Tab.Screen  name='Navi_Mentoring' component={Navi_Mentoring}
+      <Tab.Screen  name='Navi_Video' component={Navi_Video}
         options={{
           tabBarIcon:({focused})=> 
-          <Ionicons name="people" size={24} color={ focused ? "#000" : "#BDBDBD" }/>
+          <Ionicons name="play-circle-outline" size={30} color={ focused ? "#000" : "#BDBDBD" }/>
+        }}
+      />
+      <Tab.Screen name="Navi_LessonNote" component={Navi_LessonNote}
+        options={{
+          tabBarIcon:({focused})=> 
+          <SimpleLineIcons name="note" size={22} color={ focused ? "#000" : "#BDBDBD" }/>
         }}
       />
       <Tab.Screen  name='Navi_StudyMajor' component={Navi_StudyMajor}
         options={{
           tabBarIcon:({focused})=> 
           <Ionicons name="document-text-outline" size={24} color={ focused ? "#000" : "#BDBDBD" }/>
-        }}
-      />
-      <Tab.Screen  name='Navi_StudyMusic' component={Navi_StudyMusic}
-        options={{
-          tabBarIcon:({focused})=> 
-          <Feather name="book" size={24} color={ focused ? "#000" : "#BDBDBD" }/>
         }}
       />
       <Tab.Screen name='Navi_Board' component={Navi_Board}

@@ -11,6 +11,7 @@ import { Typography } from '../Components/Typography';
 import { Title } from '../Components/Title';
 import { Divider } from '../Components/Divider';
 import DateFormmating from '../Components/DateFormmating';
+import { SubTitle } from '../Components/SubTitle';
 
 export default function SuggestionBoard (props : any) {
 
@@ -94,7 +95,9 @@ export default function SuggestionBoard (props : any) {
 
   return (
     <View style={styles.container}>
-      <Title title='건의하기' enTitle='Suggestion'/>
+
+      <SubTitle title='문의하기' enTitle='Question' navigation={props.navigation}/>
+
       <View style={styles.section}>
       <View style={[styles.addSuggestionContainer]}>
         <View style={styles.addTitleBox}>

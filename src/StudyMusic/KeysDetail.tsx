@@ -4,7 +4,7 @@ import { Typography } from '../Components/Typography';
 import { Divider } from '../Components/Divider';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MainImageURL from "../../MainImageURL";
-import Loading from '../Components/Loading';
+import { Loading } from '../Components/Loading';
 
 export default function KeysDetail (props : any) {
 

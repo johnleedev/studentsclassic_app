@@ -5,7 +5,7 @@ import { Divider } from '../Components/Divider';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import axios from 'axios';
 import MainURL from "../../MainURL";
-import Loading from '../Components/Loading';
+import { Loading } from '../Components/Loading';
 import SelectDropdown from 'react-native-select-dropdown'
 
 interface KeysProps {

@@ -15,7 +15,6 @@ function Post(props: any) {
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [currentTab, setCurrentTab] = useState(1);
   const [sort, setSort] = useState('자유게시판');
 
   // 수정기능
@@ -99,33 +98,6 @@ function Post(props: any) {
 
           <View style={{padding:15, backgroundColor:'rgba(215, 111, 35, 0.10)', marginBottom:20}}>
             <Typography fontSize={12} >장난스러운 글이나, 불건전하거나, 불법적인 내용 작성시, 경고 없이 곧바로 글은 삭제됩니다. 또한 사용자 계정은 서비스 사용에 제한이 있을 수 있습니다. </Typography>
-          </View>
-
-          <View style={{flexDirection:'row', marginBottom:10}}>
-            <TouchableOpacity
-              style={{flexDirection:'row', alignItems:'center', borderWidth:2, borderRadius:5, padding:10, marginRight:10,
-                      borderColor: currentTab === 1 ? '#333' :'#F5F4F3' }}
-              onPress={()=>{setCurrentTab(1); setSort('자유게시판')}}
-            >
-              <Ionicons name='chatbubble-ellipses-outline' color='#333' size={15} style={{marginRight:5}}/>
-              <Typography color= {currentTab === 1 ? '#333' : '#6F6F6F'} fontSize={12} fontWeightIdx={2}>자유게시판</Typography>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{flexDirection:'row', alignItems:'center', borderWidth:2, borderRadius:5, padding:10, marginRight:10,
-                      borderColor: currentTab === 2 ? '#333' :'#F5F4F3' }}
-              onPress={()=>{setCurrentTab(2); setSort('나도한마디')}}
-            >
-              <Entypo name='megaphone' color='#333' size={15} style={{marginRight:5}}/>
-              <Typography color= {currentTab === 2 ? '#333' : '#6F6F6F'} fontSize={12} fontWeightIdx={2}>나도한마디</Typography>
-            </TouchableOpacity>
-            <TouchableOpacity 
-              style={{flexDirection:'row', alignItems:'center', borderWidth:2, borderRadius:5, padding:10, marginRight:10,
-                      borderColor: currentTab === 3 ? '#333' :'#F5F4F3' }}
-              onPress={()=>{setCurrentTab(3); setSort('질문있어요')}}
-            >
-              <Ionicons name='hand-right-outline' color='#333' size={15} style={{marginRight:5}}/>
-              <Typography color= {currentTab === 3 ? '#333' : '#6F6F6F'} fontSize={12} fontWeightIdx={2}>질문있어요</Typography>
-            </TouchableOpacity>
           </View>
 
           <View style={styles.userBox}>

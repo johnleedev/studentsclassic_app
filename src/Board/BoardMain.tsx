@@ -12,7 +12,7 @@ import { Title } from '../Components/Title';
 import DateFormmating from '../Components/DateFormmating';
 import { Divider } from '../Components/Divider';
 import MainImageURL from "../../MainImageURL";
-import Loading from '../Components/Loading';
+import { Loading } from '../Components/Loading';
 
 interface PostoptionsProps {
   views: string;
@@ -102,36 +102,6 @@ function BoardMain(props: any) {
   };
 
    
-  const handlePostListFilter = (sortText : string) => {
-    const copy = posts.filter((e:any)=> e.sort === sortText);
-    setPostsViewList(copy);
-  }
- 
-
-  interface SelectMenuProps {
-    tabNum : number;
-    title: string;
-    icon: React.ReactElement,
-  }
-  const SelectMenu: React.FC<SelectMenuProps> = ({ tabNum, title, icon}) => {
-    return (
-      <TouchableOpacity
-       style={{width: title === '전체' ? 50 : 77, alignItems:'center', paddingTop:10}}
-       onPress={() => {title === '전체' ?  setPostsViewList(posts) : handlePostListFilter(title); setCurrentTab(tabNum);}}
-     >
-      <View style={{marginBottom:5}}>
-        {icon}
-       </View>
-       <Typography fontSize={13} color={currentTab === tabNum ? '#C9AE00' : '#8B8B8B'}>{title}</Typography>
-       {
-         currentTab === tabNum
-         ? <View style={{width:title === '전체' ? 45 : 70, height:2, backgroundColor:'#C9AE00', marginTop:5}}></View>
-         : <View style={{width:title === '전체' ? 45 : 70, height:2, backgroundColor:'#fff', marginTop:5}}></View>
-       }
-     </TouchableOpacity>
-    )    
-  };
-
   return (
     posts.length === 0 && !isResdataFalse
     ?  (
@@ -141,14 +111,9 @@ function BoardMain(props: any) {
     ) : (
     <View style={{flex:1, backgroundColor:'#fff'}}>
 
-      <View style={{width:'100%', flexDirection: 'row', alignItems: 'flex-start', paddingLeft:10,
-                  borderBottomWidth:1, borderBottomColor:"#EFEFEF"}}>
-        <SelectMenu tabNum={1} title='전체' icon={<Entypo name='list' color='#333' size={20}/>}/>
-        <SelectMenu tabNum={2} title='자유게시판' icon={<Ionicons name='chatbubble-ellipses-outline' color='#333' size={20}/>}/>
-        <SelectMenu tabNum={3} title='고수의레슨' icon={<Feather name='file-text' color='#333' size={20}/>}/>
-        <SelectMenu tabNum={4} title='나도한마디' icon={<Entypo name='megaphone' color='#333' size={20}/>}/>
-        <SelectMenu tabNum={5} title='질문있어요' icon={<Ionicons name='hand-right-outline' color='#333' size={20}/>}/>
-      </View>
+      {/* title */}
+      <Title title='커뮤니티' enTitle='Community'/>
+      <Divider height={2} />
 
       <ScrollView 
         style={styles.container}
@@ -213,60 +178,20 @@ function BoardMain(props: any) {
                     key={index}
                     onPress={() => openPostDetails(item)}
                   >
-                    <View style={{flexDirection: 'row', marginBottom:10}}>
-                      <View style={{flexDirection:'row', alignItems:'center', borderWidth:1, borderColor:'#F5F4F3', borderRadius:5, padding:3 }}>
-                        {item.sort === '자유게시판' && <Ionicons name='chatbubble-ellipses-outline' color='#333' size={15} style={{marginRight:5}}/>}
-                        {item.sort === '고수의레슨' && <Feather name='file-text' color='#333' size={15} style={{marginRight:5}}/>}
-                        <Typography color='#6F6F6F' fontSize={12} fontWeightIdx={2}>{item.sort}</Typography>
-                      </View>
+                    <View style={{marginBottom:10}}>
+                      <Typography marginBottom={8} fontWeightIdx={1}>{renderPreview(item.title)}</Typography>
+                      <Typography fontSize={14} marginBottom={5} >{renderPreview(item.content)}</Typography>
                     </View>
-                    {
-                      item.sort === '자유게시판' 
-                      ?
-                      <>
-                      <View style={{marginBottom:10}}>
-                        <Typography marginBottom={8} fontWeightIdx={1}>{renderPreview(item.title)}</Typography>
-                        <Typography fontSize={14} marginBottom={5} >{renderPreview(item.content)}</Typography>
-                      </View>
-                      <View style={styles.postAuthor}>
-                        <Typography fontSize={14} color='#000'>{item.userName === '관리자' ? '관리자' : modifiedName}  </Typography>
-                        <Typography fontSize={14} color='#8C8C8C' >{item.userSchool}</Typography>
-                        <Typography fontSize={14} color='#8C8C8C' >{item.userSchNum} </Typography>
-                        <Typography fontSize={14} color='#8C8C8C' >{item.userPart}</Typography>
-                      </View>
-                      <View style={styles.postFooter}>
-                        <Typography fontSize={12} color='#8C8C8C'  >{DateFormmating(item.date)}</Typography>
-                        <PostOptions views={item.views} isLiked={item.isLiked} commentCount={item.commentCount}/>
-                      </View>
-                      </>
-                      :
-                      <>
-                      <View style={{flexDirection:'row', height:110, marginBottom:10, paddingVertical:5}}>
-                        <View style={{width:'30%', justifyContent:'center', alignItems:'center', marginRight:10}}>
-                          {
-                            images.length > 0
-                            ? <Image source={{uri: `${MainImageURL}/images/lessons/${images[0]}`}} style={{width:100, height:100, resizeMode:'cover', borderRadius:10}}/>
-                            : <Ionicons name='person-circle-outline' size={80} color='#8C8C8C'/>
-                          }
-                        </View>
-                        <View style={{width:'65%'}}>
-                          <View style={{height:45}}>
-                            <Typography >{renderPreview(item.title)}</Typography>
-                          </View>
-                          <View style={{height:25, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-                            <Typography fontSize={14} color='#8C8C8C'>{item.userSchool}</Typography>
-                            <Typography fontSize={14} color='#8C8C8C'>{item.userSchNum} </Typography>
-                            <Typography fontSize={14} color='#8C8C8C'>{item.userPart}</Typography>
-                            <Typography fontSize={14} color='#000'>  {item.userName === '관리자' ? '관리자' : modifiedName}</Typography>
-                          </View>
-                          <View style={{height:25, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end'}}>
-                            <Typography fontSize={12} color='#8C8C8C'  >{DateFormmating(item.date)}</Typography>
-                            <PostOptions views={item.views} isLiked={item.isLiked} commentCount={item.commentCount}/>
-                          </View>
-                        </View>
-                      </View>
-                      </>
-                    }
+                    <View style={styles.postAuthor}>
+                      <Typography fontSize={14} color='#000'>{item.userName === '관리자' ? '관리자' : modifiedName}  </Typography>
+                      <Typography fontSize={14} color='#8C8C8C' >{item.userSchool}</Typography>
+                      <Typography fontSize={14} color='#8C8C8C' >{item.userSchNum} </Typography>
+                      <Typography fontSize={14} color='#8C8C8C' >{item.userPart}</Typography>
+                    </View>
+                    <View style={styles.postFooter}>
+                      <Typography fontSize={12} color='#8C8C8C'  >{DateFormmating(item.date)}</Typography>
+                      <PostOptions views={item.views} isLiked={item.isLiked} commentCount={item.commentCount}/>
+                    </View>
                     <Divider height={2}/>
                   </TouchableOpacity>
                 )

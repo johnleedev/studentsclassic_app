@@ -6,7 +6,7 @@ import MainURL from "../../MainURL";
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { Divider } from '../Components/Divider';
-import Loading from '../Components/Loading';
+import { Loading } from '../Components/Loading';
 
 export default function WordSearch (props : any) {
   

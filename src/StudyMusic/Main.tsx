@@ -5,9 +5,9 @@ import { Title } from '../Components/Title';
 import WordMain from './WordMain';
 import KeysMain from './KeysMain';
 import TuneMain from './TuneMain';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
-
-export default function Main (props : any) {
+export default function MusicMain (props : any) {
 
    // 커스텀 탭 버튼 ----------------------------------------------------------------------
   const [currentTab, setCurrentTab] = useState(1);
@@ -43,7 +43,17 @@ export default function Main (props : any) {
         <SelectMenu tabNum={1} title='음악용어'/>
         <SelectMenu tabNum={2} title='조성'/>
         <SelectMenu tabNum={3} title='음정'/>
-        
+
+        <TouchableOpacity 
+          style={{position:'absolute', right:22, bottom:10, borderRadius:5,
+                      borderWidth:1, borderColor:'#555', padding:5, flexDirection:'row', alignItems:'center'}}
+          onPress={()=>{
+            props.navigation.navigate('Main')
+          }}
+        >
+          <Typography fontSize={14} color='#555' >노래스터디 </Typography>
+          <AntDesign name='right'  color='#555' />
+        </TouchableOpacity>
       </View>
       
       {currentTab === 1 && <WordMain navigation={props.navigation}/>}
