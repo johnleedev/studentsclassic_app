@@ -1,6 +1,5 @@
 import React, { useState, useEffect} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions, TextInput, 
-      NativeSyntheticEvent, TextInputChangeEventData } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions} from 'react-native';
 import axios from 'axios';
 import MainURL from "../../MainURL";
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -9,7 +8,7 @@ import { Typography } from '../Components/Typography';
 import { Loading } from '../Components/Loading';
 import YoutubePlayer from "react-native-youtube-iframe";
 import SelectDropdown from 'react-native-select-dropdown'
-import { Divider } from '../Components/Divider';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 
 export default function VideoMain (props: any) {
@@ -123,7 +122,7 @@ export default function VideoMain (props: any) {
       });
   };
 
-  // 검색 ---------------------------------------------------------------------
+  // 셀렉박스 ---------------------------------------------------------------------
 
   const [schools, setSchools] = useState<any>([]);
   const handleNationChange = (selected : any) => {
@@ -136,6 +135,12 @@ export default function VideoMain (props: any) {
       schoolPosts(asyncGetData.userAccount, selected, schoolPage);
     }
   };
+
+
+  const goToPostScreen = () => {
+    props.navigation.navigate('VideoPost', {userData : asyncGetData});
+  };
+
 
   return (
     posts.length === 0 && !isResdataFalse
@@ -185,7 +190,7 @@ export default function VideoMain (props: any) {
                       <View style={{borderWidth:1, borderColor:'#EAEAEA', padding:10, borderRadius:10}}>
                         {item.sort === 'graduate' && <Typography fontSize={14}>대학졸연</Typography>}
                         {item.sort === 'regular' && <Typography fontSize={14}>정기연주회</Typography>}
-                        {item.sort === 'user' && <Typography fontSize={14}>회원영상</Typography>}
+                        {item.sort === 'etc' && <Typography fontSize={14}>기타연주회</Typography>}
                       </View>
                       <View style={{flexDirection:'row'}}>
                         <Typography fontWeightIdx={1}>{item.year}년. </Typography>
@@ -255,6 +260,9 @@ export default function VideoMain (props: any) {
             </TouchableOpacity>
           )}
       </ScrollView>
+      <TouchableOpacity style={styles.newPostButton} onPress={goToPostScreen}>
+        <Entypo name="plus" size={25} color="#fff"/>
+      </TouchableOpacity>
     </View>
     )
   );
@@ -292,7 +300,21 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     marginBottom: 16,
-  }
+  },
+  newPostButton: {
+    width:50,
+    height:50,
+    borderRadius: 25,
+    position: 'absolute',
+    bottom: 16,
+    right: 16,
+    backgroundColor: '#000',
+    padding: 12,
+    alignItems: 'center',
+    justifyContent:'center',
+    borderWidth:1,
+    borderColor:'#fff'
+  },
 });
 
 

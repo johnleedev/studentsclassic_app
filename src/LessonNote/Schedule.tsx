@@ -61,7 +61,7 @@ export default function Schedule(props:any) {
   const [times, setTimes] = useState('1시');
   const optionsTimeSelect = ["PM", "AM"];
   const optionsTimes = ["1시", "1시30분", "2시", "2시30분", "3시", "3시30분", "4시", "4시30분", "5시", "5시30분", "6시", "6시30분", 
-                        "7시", "7시30분", "8시", "8시30분", "9시", "9시30분", "11시", "11시30분", "12시", "12시30분"];
+                        "7시", "7시30분", "8시", "8시30분", "9시", "9시30분", "10시", "10시30분", "11시", "11시30분", "12시", "12시30분"];
 
   // 스케줄 입력 함수
   const changeInput = async () => {

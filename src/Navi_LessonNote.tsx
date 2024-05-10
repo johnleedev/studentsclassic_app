@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Main from "./LessonNote/Main";
 
-
-
 const Stack = createNativeStackNavigator();
 
 function Navi_Mentoring() {
@@ -12,7 +10,6 @@ function Navi_Mentoring() {
       screenOptions={{headerShown: false}}
     >
       <Stack.Screen name={"Main"} component={Main} />
-
     </Stack.Navigator>
   );
 }

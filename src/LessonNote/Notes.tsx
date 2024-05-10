@@ -1,4 +1,4 @@
-import { Alert, Image, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, Image, Modal, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Dimensions, Platform } from 'react-native'
 import React, { useState } from 'react'
 import { Typography } from '../Components/Typography'
 import { Divider } from '../Components/Divider'
@@ -6,9 +6,11 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { ButtonBox } from '../Components/ButtonBox';
 import axios from 'axios';
 import MainURL from '../../MainURL';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 export default function Notes(props:any) {
 
+  const diviceHeight = Dimensions.get('window').height;
 
   // 스케줄 입력 모달창
   const [isInputModalVisible, setInputModalVisible] = useState(false);
@@ -78,16 +80,18 @@ export default function Notes(props:any) {
           props.notes.map((item:any, index:any)=>{
 
             const copy = item.date.split('-');
+            const reformYearCopy = `${copy[0]}년`
             const reformDateCopy = `${copy[1]}월 ${copy[2]}일`
- 
+
             return (
               <View key={index}>
                 <View style={{flexDirection:'row', minHeight:100}}>
                   <View style={{width:'30%', justifyContent:'center', alignItems:'center'}}>
-                    <View style={{position:'absolute'}}>
-                      <Image style={{opacity:0.3}} source={require('../images/mentoring/orangetitle.png')} />
-                    </View>
+                    <Typography>{reformYearCopy}</Typography>
                     <Typography>{reformDateCopy}</Typography>
+                    <View style={{position:'absolute'}}>
+                      <Image style={{opacity:0.3, width:90, height:60}} source={require('../images/mentoring/orangetitle.png')}/>
+                    </View>
                   </View>
                   <TouchableOpacity style={{width:'70%', justifyContent:'center', paddingLeft:5}}
                     onPress={()=>{
@@ -111,7 +115,7 @@ export default function Notes(props:any) {
             )
           })
         }
-        <View style={{height:100}}></View>
+        <View style={{height:150}}></View>
       </ScrollView>
 
       <Modal
@@ -120,7 +124,7 @@ export default function Notes(props:any) {
         visible={isInputModalVisible}
         onRequestClose={()=>{setInputModalVisible(!isInputModalVisible);}}
       >
-        <View style={{flex:1, justifyContent:'center'}}>
+        <View style={{marginTop: Platform.OS === 'android' ? null : getStatusBarHeight()}}>
           <View style={{ minHeight:300, borderRadius: 20, backgroundColor: 'white', 
                         padding: 20}}>
             
@@ -145,7 +149,7 @@ export default function Notes(props:any) {
               <View style={styles.infoBox}>
                 <Typography>내용: </Typography>
                 <TextInput
-                  style={[styles.input, { minHeight: 200, textAlignVertical: 'top',}]}
+                  style={[styles.input, { minHeight: 250, textAlignVertical: 'top',}]}
                   placeholder="레슨 중 중요 사항을 기록해보세요"
                   value={input}
                   onChangeText={setInput}
@@ -173,6 +177,13 @@ const styles = StyleSheet.create({
   },
   section : {
     padding: 20,
+  },
+  android: {
+    backgroundColor: '#000',
+  },
+  ios : {
+    backgroundColor: '#000',
+    paddingTop: getStatusBarHeight()
   },
   modalBackCover : {
     position: 'absolute',

@@ -69,7 +69,7 @@ export default function RequestBoard (props : any) {
     <View style={styles.container}>
       <Title title='곡 등록 요청 목록' enTitle='Suggestion'/>
       <View style={{paddingHorizontal:20, width:'100%', flexDirection:'row', justifyContent:'space-between', alignItems:'center'}}>
-        <Typography fontSize={12} color='#8C8C8C'>최근 10개까지 보여집니다.</Typography>
+        <Typography fontSize={12} color='#8C8C8C'>최근 5개까지 보여집니다.</Typography>
         <TouchableOpacity 
           style={{borderRadius:5, borderWidth:1, borderColor:'#555', padding:5}}
           onPress={()=>{
